@@ -1,5 +1,5 @@
 use crate::schema::recipes;
-use diesel::{prelude::*, sql_types::Array};
+use diesel::prelude::*;
 use serde::{Serialize, Deserialize};
 
 
@@ -8,9 +8,9 @@ use serde::{Serialize, Deserialize};
 pub struct NewRecipe<'a> {
     pub name: &'a String,
     pub instructions: &'a String,
-    pub ingredients: Vec<String>,
+    pub ingredients: String,
 }
-/*
+
 #[derive(Queryable, Selectable, Serialize, Deserialize)]
 #[diesel(table_name = recipes)]
 #[diesel(check_for_backend(diesel::pg::Pg))]
@@ -18,5 +18,5 @@ pub struct Recipe {
     pub id: i32,
     pub name: String,
     pub instructions: String,
-    pub ingredients: Array<String>,
-} */
+    pub ingredients: String,
+} 

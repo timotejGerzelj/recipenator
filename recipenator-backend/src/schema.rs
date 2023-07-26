@@ -6,6 +6,6 @@ diesel::table! {
         #[max_length = 100]
         name -> Varchar,
         instructions -> Text,
-        ingredients -> Array<Nullable<Text>>,
+        ingredients -> Text,
     }
 }

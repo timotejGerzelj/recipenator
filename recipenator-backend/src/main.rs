@@ -2,8 +2,9 @@ mod models;
 mod lib;
 mod schema;
 use diesel::prelude::*;
+use crate::models::Recipe;
+
 use self::lib::*;
-use models::NewRecipe;
 fn main() {
     use self::schema::recipes::dsl::*;
 
@@ -14,11 +15,12 @@ fn main() {
         .load(connection)
         .expect("Error loading posts");
 
-    println!("Displaying {} posts", results.len());
-    for post in results {
-        println!("{}", post.title);
+    println!("Displaying {} recipes", results.len());
+    for r in results {
+        println!("{}", r.name);
         println!("-----------\n");
-        println!("{}", post.body);
+        println!("{}", r.instructions);
+        //let stuff_str: String = r.ingredients.into_iter().map(|i| i.to_string()).collect::<String>();
     }
 
 }
