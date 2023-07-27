@@ -6,12 +6,12 @@ use serde::{Serialize, Deserialize};
 #[derive(Insertable)]
 #[diesel(table_name = recipes)]
 pub struct NewRecipe<'a> {
-    pub name: &'a String,
+    pub name: &'a str,
     pub instructions: &'a String,
     pub ingredients: String,
 }
 
-#[derive(Queryable, Selectable, Serialize, Deserialize)]
+#[derive(Queryable, Selectable, Serialize, Deserialize, Debug)]
 #[diesel(table_name = recipes)]
 #[diesel(check_for_backend(diesel::pg::Pg))]
 pub struct Recipe {
