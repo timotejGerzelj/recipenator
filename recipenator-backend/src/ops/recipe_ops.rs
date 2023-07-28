@@ -22,16 +22,25 @@ pub fn create_recipe(conn: &mut PgConnection, name: &str ,body: &str, ingredient
         .get_result(conn)
         .expect("Error saving new recipe")
 }
-/*
-pub fn update_recipe(id: i32, name: String, body: String, updated_ingredients: Vec<String>) ->  Recipe{
+
+pub fn update_recipe(id: i32, name: String, body: String, updated_ingredients: Vec<String>) {
+    use crate::schema::recipes;
+
+    let updated_recipe = Recipe {
+        id: id,
+        name: name,
+        instructions: body,
+        ingredients: updated_ingredients.join(" ")
+        // Set other fields if needed
+    };
     let connection = &mut establish_connection();
-    let recipe = diesel::update(recipes.find(id))
-    .set(published.eq(true))
-    .returning(Recipe::as_returning())
-    .get_result(connection)
-    .unwrap();
+
+    let num_updated = diesel::update(recipes::table.find(id))
+        .set(updated_recipe)
+        .execute(connection)
+        .expect("Error updating recipe");
 }
- */
+ 
 
 
 pub fn delete_recipe(recipe_id: i32) {
@@ -55,9 +64,4 @@ pub fn get_recipe(recipe_id: i32) {
         Ok(recipe) => println!("Recipe with id: {} has name: {}", recipe.id, recipe.name),
         Err(_) => println!("An error occured while fetching recipe {}", recipe_id),
     }
-}
-
-
-pub fn show_recipe() {
-
 }
