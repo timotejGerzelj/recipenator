@@ -7,10 +7,14 @@ use std::io::{stdin, Read};
 use diesel::prelude::*;
 use crate::{models::Recipe, ops::recipe_ops::{delete_recipe, update_recipe}};
 use ops::recipe_ops::create_recipe;
+use actix_web::{web, App, HttpServer, Responder};
 
 use self::db::*;
-fn main() {
-    use self::schema::recipes::dsl::*;
+
+#[actix_web::main]
+async fn main() {
+
+/*    use self::schema::recipes::dsl::*;
 
 
     let connection = &mut establish_connection();
@@ -51,6 +55,5 @@ fn main() {
         println!("instructions: {}", r.instructions);
         println!("ingredients: {}", r.ingredients);
         println!();
-    }
-
+    } */
 }
