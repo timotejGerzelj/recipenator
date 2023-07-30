@@ -1,15 +1,14 @@
-mod models;
-mod db;
 mod schema;
 mod ops;
+mod models;
+mod db;
 use std::io::{stdin, Read};
 
-use diesel::prelude::*;
-use crate::{models::Recipe, ops::recipe_ops::{delete_recipe, update_recipe}};
-use ops::recipe_ops::create_recipe;
-use actix_web::{web, App, HttpServer, Responder};
 
-use self::db::*;
+use diesel::prelude::*;
+//use crate::models::Recipe;
+//use crate::ops::recipe_ops::{delete_recipe, update_recipe, create_recipe};
+use actix_web::{web, App, HttpServer, Responder};
 
 #[actix_web::main]
 async fn main() {

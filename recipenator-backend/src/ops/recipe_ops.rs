@@ -4,9 +4,8 @@ use diesel::{PgConnection, SelectableHelper, RunQueryDsl};
 
 use diesel::expression_methods::ExpressionMethods;
 use diesel::query_dsl::QueryDsl;
-
-
-use crate::{models::{NewRecipe, Recipe}, db::establish_connection};
+use crate::models::recipe::{Recipe, NewRecipe};
+use crate::db::connection::establish_connection;
 pub fn handle_recipe() {
 
 }
