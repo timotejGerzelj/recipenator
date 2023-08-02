@@ -2,7 +2,8 @@
 
 diesel::table! {
     recipes (id) {
-        id -> Int4,
+        #[max_length = 255]
+        id -> Varchar,
         #[max_length = 100]
         name -> Varchar,
         instructions -> Text,

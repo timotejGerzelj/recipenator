@@ -11,12 +11,14 @@ pub struct NewRecipe<'a> {
     pub ingredients: String,
 }
 
-#[derive(Queryable, Selectable, Serialize, Deserialize, Debug, AsChangeset)]
+#[derive(Queryable, Selectable, Serialize, Deserialize, Debug, Insertable, AsChangeset)]
 #[diesel(table_name = recipes)]
 #[diesel(check_for_backend(diesel::pg::Pg))]
 pub struct Recipe {
-    pub id: i32,
+    #[serde(default)]
+    pub id: String,
     pub name: String,
     pub instructions: String,
     pub ingredients: String,
 } 
+
