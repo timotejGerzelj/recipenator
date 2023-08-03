@@ -1,10 +1,83 @@
-import React from 'react';
+import React, { useState } from 'react';
 
-const UpdateRecipe = () => {
+interface Recipe {
+  id: string,
+  name: string,
+  instructions: string,
+  ingredients: string,
+}
+
+
+const UpdateRecipe = ({ recipe, onCancel }) => {
+  const [editingRecipe, setEditingRecipe] = useState<Recipe | null>(null);
+  const [updatedName, setUpdatedName] = useState(recipe.name);
+  const [updatedIngredients, setUpdatedIngredients] = useState(recipe.ingredients);
+  const [updatedInstructions, setUpdatedInstructions] = useState(recipe.instructions);
+
+const handleUpdate = (e: React.FormEvent) => {
+  e.preventDefault();
+  const updatedRecipe: Recipe = {
+    ...recipe,
+    name: updatedName,
+    ingredients: updatedIngredients,
+    instructions: updatedInstructions,
+  }
+  updateRecipeItem(updatedRecipe);
+}
+
+async function updateRecipeItem(item: Recipe) {
+  console.log("data", item)
+  let dataMod = {
+    name: item.name,
+    instructions: item.instructions,
+    ingredients: item
+  }
+  console.log("dataMod ", dataMod);
+
+  try {
+    // Make the API call to your Rust backend here
+    const response = await fetch(`http://localhost:8080/api/recipes/${item.id}/recipe`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(item),
+    });
+
+    if (response.ok) {
+      // Handle successful response, e.g., show a success message
+      console.log('Form submitted successfully!'); 
+    } else {
+      // Handle error response, e.g., show an error message
+      console.error('Failed to submit form.');
+    }
+  } catch (error) {
+    // Handle network errors or other exceptions
+    console.error('An error occurred while submitting the form:', error);
+  }
+};
+
   return (
     <div>
-      <h2>Update Recipe</h2>
-      {/* Your form components for updating a recipe */}
+      <form onSubmit={handleUpdate}>
+        <label>
+          Name:
+          <input type="text" value={updatedName} onChange={(e) => setUpdatedName(e.target.value)} />
+        </label>
+        <label>
+          Ingredients:
+          <input type="text" value={updatedIngredients} onChange={(e) => setUpdatedIngredients(e.target.value)} />
+        </label>
+        <label>
+          Instructions:
+          <input type="text" value={updatedInstructions} onChange={(e) => setUpdatedInstructions(e.target.value)} />
+        </label>
+        <button type="submit">Update</button>
+        <button type="button" onClick={onCancel}>
+          Cancel
+        </button>
+      </form>
+
     </div>
   );
 };

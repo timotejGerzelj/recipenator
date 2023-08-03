@@ -17,7 +17,7 @@ use crate::{db::connection::Database, models::recipe::{Recipe, NewRecipe, self}}
 
 
 #[post("/recipes/create")]
-pub async fn create_recipe(db: web::Data<Database>, new_recipe: web::Json<Recipe>) -> impl Responder {
+pub async fn create_recipe(db: web::Data<Database>, new_recipe: web::Json<Recipe>) -> HttpResponse {
     let recipe = db.create_recipe(new_recipe.into_inner());
     match recipe {
         Ok(todo) => HttpResponse::Ok().json(todo),
@@ -34,8 +34,13 @@ pub async fn create_recipe(db: web::Data<Database>, new_recipe: web::Json<Recipe
 */
 
 #[put("/recipes/{recipe_global_id}/recipe")]
-pub async fn update_recipe(task_identifier: Path<i32>) -> impl Responder {
-    return Json("Hello Update recipe".to_string());
+pub async fn update_recipe(db: web::Data<Database>, id: web::Path<String>, updated_recipe: web::Json<Recipe>)  -> HttpResponse {
+    
+    let recipe = db.update_recipe(&id, updated_recipe.into_inner());
+    match recipe {
+        Some(todo) => HttpResponse::Ok().json(todo),
+        None => HttpResponse::NotFound().body("Todo not found"),
+    }
 }
 
 #[delete("/recipes/{recipe_global_id}/recipe")]
@@ -56,6 +61,12 @@ pub async fn get_recipe(db: web::Data<Database>, id: web::Path<String>) -> impl 
         None => HttpResponse::NotFound().body("Recipe not found"),
     }}
 
+#[get("/recipes")]
+pub async fn get_recipes(db: web::Data<Database>) -> HttpResponse {
+    let recipes = db.get_recipes();
+    HttpResponse::Ok().json(recipes)
+}
+
 pub fn config(cfg: &mut web::ServiceConfig) {
         cfg.service(
             web::scope("/api")
@@ -63,5 +74,6 @@ pub fn config(cfg: &mut web::ServiceConfig) {
                 .service(get_recipe)
                 .service(update_recipe)
                 .service(delete_recipe)
+                .service(get_recipes)
 );
 }

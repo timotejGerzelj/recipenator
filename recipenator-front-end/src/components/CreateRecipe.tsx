@@ -2,20 +2,51 @@ import React, { ChangeEvent, FormEvent, Fragment, useState } from 'react';
 import { useForm, useFieldArray } from "react-hook-form";
 
 type FormValues = {
-    recipeName: '',
-    recipeDescription: '',
-    recipeIngredients: { name: string }[],
+    name: '',
+    instructions: '',
+    ingredients: { name: string }[],
   };
 
 const CreateRecipe = () => {
-    const onSubmit = (data: any) => console.log(data);
+    const onSubmit = async (data: FormValues) => {
+        console.log("data", data)
+        let ingredients = data.ingredients.map((x)=> x.name)
+        let dataMod = {
+          name: data.name,
+          instructions: data.instructions,
+          ingredients: ingredients.join(" ")
+        }
+        console.log("dataMod ", dataMod);
+
+        try {
+          // Make the API call to your Rust backend here
+          const response = await fetch('http://localhost:8080/api/recipes/create', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(dataMod),
+          });
+    
+          if (response.ok) {
+            // Handle successful response, e.g., show a success message
+            console.log('Form submitted successfully!'); 
+          } else {
+            // Handle error response, e.g., show an error message
+            console.error('Failed to submit form.');
+          }
+        } catch (error) {
+          // Handle network errors or other exceptions
+          console.error('An error occurred while submitting the form:', error);
+        }
+      };
     
     const { register, handleSubmit, control, watch} = useForm<FormValues>();
     const { fields, append } = useFieldArray({
         control,
-        name: "recipeIngredients"
+        name: "ingredients"
       });
-      const watchFieldArray = watch("recipeIngredients");
+      const watchFieldArray = watch("ingredients");
       const controlledFields = fields.map((field, index) => {
         console.log(field);
         console.log(index);
@@ -32,13 +63,13 @@ const CreateRecipe = () => {
             Recipe Name:
         </label>
         <input 
-            {...register("recipeName")} placeholder='What is the recipe called?'
+            {...register("name")} placeholder='What is the recipe called?'
         />
         <label>
             Description:
         </label>
         <textarea 
-            {...register("recipeDescription")}
+            {...register("instructions")}
             placeholder='How can the recipe be made?'
         />
         <label>
@@ -46,7 +77,7 @@ const CreateRecipe = () => {
         </label>
 
         {controlledFields.map((field, index) => {
-          return <input {...register(`recipeIngredients.${index}.name` as const)} />;
+          return <input {...register(`ingredients.${index}.name` as const)} />;
         })}
 
         
@@ -56,7 +87,7 @@ const CreateRecipe = () => {
             append({
               name: ""
             })
-          }>Append
+          }>Add ingredient
         </button>
         <button type="submit">Submit Recipe</button>
        </form>    

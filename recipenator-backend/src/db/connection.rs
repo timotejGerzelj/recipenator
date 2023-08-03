@@ -61,8 +61,7 @@ impl Database {
 
     }
 
-    pub fn update_recipe(&mut self, recipe_id: &str, updated_recipe: Recipe) -> Option<Recipe> {
-
+    pub fn update_recipe(&self, recipe_id: &str, updated_recipe: Recipe) -> Option<Recipe> {
         let num_updated = diesel::update(recipes.find(recipe_id))
             .set(updated_recipe)
             .get_result::<Recipe>(&mut self.pool.get().unwrap())
@@ -70,5 +69,9 @@ impl Database {
         return Some(num_updated);
     }
 
-
+    pub fn get_recipes(&self) -> Vec<Recipe> {
+        recipes
+            .load::<Recipe>(&mut self.pool.get().unwrap())
+            .expect("Error loading all todos")
+    }
 }
