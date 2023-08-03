@@ -7,8 +7,15 @@ interface Recipe {
   ingredients: string,
 }
 
+interface UpdateRecipeProps {
+  recipe: Recipe;
+  onCancel: () => void;
+  recipes: Recipe[];
+  onRecipeUpdate: (updatedRecipe: Recipe) => void;
+}
 
-const UpdateRecipe = ({ recipe, onCancel }) => {
+
+const UpdateRecipe = ({ recipe, onCancel, onRecipeUpdate }) => {
   const [editingRecipe, setEditingRecipe] = useState<Recipe | null>(null);
   const [updatedName, setUpdatedName] = useState(recipe.name);
   const [updatedIngredients, setUpdatedIngredients] = useState(recipe.ingredients);
@@ -27,13 +34,6 @@ const handleUpdate = (e: React.FormEvent) => {
 
 async function updateRecipeItem(item: Recipe) {
   console.log("data", item)
-  let dataMod = {
-    name: item.name,
-    instructions: item.instructions,
-    ingredients: item
-  }
-  console.log("dataMod ", dataMod);
-
   try {
     // Make the API call to your Rust backend here
     const response = await fetch(`http://localhost:8080/api/recipes/${item.id}/recipe`, {
@@ -46,7 +46,9 @@ async function updateRecipeItem(item: Recipe) {
 
     if (response.ok) {
       // Handle successful response, e.g., show a success message
-      console.log('Form submitted successfully!'); 
+      console.log('Form submitted successfully!');
+      onRecipeUpdate(item);
+      setEditingRecipe(null);
     } else {
       // Handle error response, e.g., show an error message
       console.error('Failed to submit form.');

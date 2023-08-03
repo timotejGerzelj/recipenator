@@ -10,22 +10,11 @@ interface Recipe {
 
 
 
-const ListRecipes = () => {
+const ListRecipes = ({recipes}) => {
     const [data, setData] = useState<Recipe[]>([]);
     const [editingRecipe, setEditingRecipe] = useState<Recipe | null>(null);
     useEffect(() => {
-        async function fetchData() {
-          try {
-            const response = await fetch('http://localhost:8080/api/recipes'); // Replace with your backend endpoint
-            const jsonData = await response.json();
-            console.log(jsonData);
-            setData(jsonData);
-          } catch (error) {
-            console.error('Error fetching data:', error);
-          }
-        }
-    
-        fetchData();
+        setData(recipes);
       }, []);
     async function handleDelete(id: string) {
         try {
@@ -43,6 +32,13 @@ const ListRecipes = () => {
           }
     }
 
+    const handleRecipeUpdate = (updatedRecipe: Recipe) => {
+        // Update the recipes array in the parent component
+        const updatedRecipes = recipes.map((recipe) => (recipe.id === updatedRecipe.id ? updatedRecipe : recipe));
+        setData(updatedRecipes); // Assuming you have a setRecipes function to update the state
+      };
+
+
     return (
         <div>
             <h1>All recipes</h1>
@@ -59,6 +55,7 @@ const ListRecipes = () => {
                     <UpdateRecipe
                         recipe={item}
                         onCancel={() => setEditingRecipe(null)}
+                        onRecipeUpdate={handleRecipeUpdate}
               />
             )}
                 </li>
