@@ -1,12 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import UpdateRecipe from './UpdateRecipe';
-
-interface Recipe {
-    id: string,
-    name: string,
-    instructions: string,
-    ingredients: string,
-}
+import { Recipe } from '../types/interfaces';
 
 
 

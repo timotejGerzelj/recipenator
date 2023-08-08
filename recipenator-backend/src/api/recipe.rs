@@ -13,7 +13,7 @@ use actix_web::{
 use serde::{Serialize, Deserialize};
 use derive_more::{Display};
 
-use crate::{db::connection::Database, models::recipe::{Recipe, NewRecipe, self}};
+use crate::{db::connection::Database, models::recipe::{Recipe, self}};
 
 
 #[post("/recipes/create")]

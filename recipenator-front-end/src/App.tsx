@@ -1,18 +1,48 @@
 import { useEffect, useState } from 'react'
 import './App.css'
-import CreateRecipe from './components/CreateRecipe';
-import ListRecipes from './components/ListRecipes';
-
-
-interface Recipe {
-  id: string,
-  name: string,
-  instructions: string,
-  ingredients: string,
-}
+import PantryList from './components/PantryList';
+import { Ingredient, Pantry as PantryType } from './types/interfaces';
 
 function App() {
+  const [pantry, setPantry] = useState<PantryType>({ ingredients: [] });
   const [currentView, setCurrentView] = useState('');
+  const updatePantryIngredients = (updatedIngredients: Ingredient[]) => {
+    console.log("updated ingredients: ", updatedIngredients)
+    setPantry((prevPantry) => ({
+      ...prevPantry,
+      ingredients: updatedIngredients,
+    }));
+  };
+  const setNewView = (view: string) => {
+    setCurrentView(view);
+  };
+  const renderView = () => {
+    switch (currentView) {
+      case 'pantryList':
+        return <PantryList
+        ingredientList={pantry.ingredients}
+        updatePantryListIngredients={updatePantryIngredients}
+      />
+      case 'list':
+    }
+  }
+
+  return (
+    <>
+        <button onClick={() => setNewView('pantryList')}>Update Pantry List</button>
+        <button onClick={() => setNewView('list')}>Get Recipes</button>
+        <div>{renderView()}</div>
+      <ul>
+        {pantry.ingredients.map((ing, index) => (
+          <li key={index}>
+            {ing.name} - {ing.quantity} {ing.measure}
+          </li>
+        ))}
+      </ul>
+    </>
+  );
+
+/*  const [currentView, setCurrentView] = useState('');
   const [data, setData] = useState<Recipe[]>([]);
 
   useEffect(() => {
@@ -51,6 +81,7 @@ function App() {
       <div>{renderView()}</div>
     </>
   )
+  */
 }
 
 export default App

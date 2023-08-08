@@ -19,3 +19,4 @@ derive_more = "^0.99"
 diesel = { version = "2.1.0", features = ["postgres", "r2d2", "chrono", "uuid"] }
 dotenvy = "0.15"
 actix-cors = "0.6.4"
+chrono = "0.4"
