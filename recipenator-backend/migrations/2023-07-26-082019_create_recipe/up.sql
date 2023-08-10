@@ -1,20 +1,18 @@
-CREATE TABLE recipes (
-    recipe_id VARCHAR(255) PRIMARY KEY,
-    recipe_name VARCHAR(100) NOT NULL,
-    instructions TEXT NOT NULL,
-    ingredients  TEXT NOT NULL
+CREATE TABLE pantry (
+    pantry_id VARCHAR(255) PRIMARY KEY
 );
 
-CREATE TABLE ingredients (
+CREATE TABLE ingredient (
     ingredient_id VARCHAR(255) PRIMARY KEY,
     ingredient_name VARCHAR(100) NOT NULL,
-    quantity integer NOT NULL,
     unit VARCHAR(50) NOT NULL
 );
 
+CREATE TABLE pantry_ingredients_table (
+    pantry_id VARCHAR(255) REFERENCES pantry(pantry_id),
+    ingredient_id VARCHAR(255) NOT NULL REFERENCES ingredient(ingredient_id),
+    quantity integer NOT NULL,
+    PRIMARY KEY (pantry_id, ingredient_id)
 
-CREATE TABLE recipe_ingredients (
-    recipe_id VARCHAR(255) PRIMARY KEY REFERENCES recipes(recipe_id),
-    ingredient_id VARCHAR(255) REFERENCES ingredients(ingredient_id)
 );
- 
+

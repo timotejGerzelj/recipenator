@@ -1,3 +1,3 @@
-DROP TABLE IF EXISTS recipe_ingredients;
-DROP TABLE IF EXISTS recipes;
-DROP TABLE IF EXISTS ingredients;
+DROP TABLE IF EXISTS pantry_ingredients_table;
+DROP TABLE IF EXISTS pantry;
+DROP TABLE IF EXISTS ingredient;

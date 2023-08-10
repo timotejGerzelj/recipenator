@@ -3,7 +3,6 @@ mod models;
 mod db;
 mod api;
 use std::io::{stdin, Read};
-use api::recipe::{create_recipe, get_recipe, update_recipe, delete_recipe};
 
 use diesel::prelude::*;
 //use crate::models::Recipe;
@@ -38,7 +37,7 @@ async fn main() -> std::io::Result<()> {
     HttpServer::new(move ||
         App::new()
             .app_data(app_data.clone())
-            .configure(api::recipe::config)
+            .configure(api::ingredients::config)
             .service(healthcheck)
             .default_service(web::route().to(not_found))
             .wrap(            
