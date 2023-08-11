@@ -32,7 +32,7 @@ async fn not_found() -> HttpResponse {
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
-    let recipe_db = db::connection::Database::establish_connection();
+    let recipe_db = db::database::Database::establish_connection();
     let app_data = web::Data::new(recipe_db);
     HttpServer::new(move ||
         App::new()

@@ -16,7 +16,7 @@ use actix_web::{
 use serde::{Serialize, Deserialize};
 use derive_more::{Display};
 
-use crate::{db::connection::Database, models::recipe::{Ingredient, self}};
+use crate::{models::recipe::{Ingredient}, db::Database};
 #[post("/ingredient")]
 pub async fn create_ingredient(db: web::Data<Database>, new_ingredient: web::Json<Ingredient>) -> HttpResponse {
     let ingredient = db.create_ingredient(new_ingredient.into_inner());

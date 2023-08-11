@@ -11,7 +11,7 @@ use actix_web::{
     HttpResponse};
 use serde::Deserialize;
 
-use crate::{db::connection::Database, models::recipe::PantryIngredientsTable};
+use crate::{db::database::Database, models::recipe::PantryIngredientsTable};
 
 #[derive(Deserialize)]
 struct PathParams {
