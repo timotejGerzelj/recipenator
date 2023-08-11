@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import './App.css'
 import PantryList from './components/PantryList';
 import { Ingredient, Pantry as PantryType } from './types/interfaces';
+import RecipeFind from './components/RecipeFind';
 
 function App() {
   const [pantry, setPantry] = useState<PantryType>({ ingredients: [] });
@@ -23,15 +24,22 @@ function App() {
         ingredientList={pantry.ingredients}
         updatePantryListIngredients={updatePantryIngredients}
       />
-      case 'list':
+      case 'recipe':
+        return <RecipeFind ingredientsList={
+          pantry.ingredients
+        } />
     }
   }
-
+/*        <button onClick={() => setNewView('pantryList')}>Update Pantry List</button>
+        <button onClick={() => setNewView('recipe')}>Find Recipe</button>
+        <div>{renderView()}</div>*/
   return (
     <>
-        <button onClick={() => setNewView('pantryList')}>Update Pantry List</button>
-        <button onClick={() => setNewView('list')}>Get Recipes</button>
-        <div>{renderView()}</div>
+        <PantryList
+        ingredientList={pantry.ingredients}
+        updatePantryListIngredients={updatePantryIngredients}/><br/>
+        <RecipeFind ingredientsList={
+          pantry.ingredients}/>
       <ul>
         {pantry.ingredients.map((ing, index) => (
           <li key={index}>

@@ -30,10 +30,3 @@ pub async fn get_ingredients(db: web::Data<Database>) -> HttpResponse {
     HttpResponse::Ok().json(recipes)
 }
 
-    pub fn config(cfg: &mut web::ServiceConfig) {
-        cfg.service(
-            web::scope("/api")
-                .service(create_ingredient)
-                .service(get_ingredients)
-);
-}

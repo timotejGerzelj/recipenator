@@ -2,6 +2,16 @@ import React, { useState, useEffect } from 'react';
 import UpdateRecipe from './UpdateRecipe';
 import { Ingredient, Recipe } from '../types/interfaces';
 import { useForm, useFieldArray } from "react-hook-form";
+import {
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogHeader,
+    DialogTitle,
+    DialogTrigger,
+  } from "../../@/components/ui/dialog"
+  
+
 
 interface PantryListProps {
     ingredientList: Ingredient[];
@@ -33,9 +43,19 @@ const PantryList = ({ingredientList, updatePantryListIngredients}) => {
         updatePantryListIngredients(ingredients);
     }
     return (
-    <>
-        <h1>PantryList</h1>
-        <form 
+    
+        
+        <Dialog>
+        <DialogTrigger>Update pantry</DialogTrigger>
+        <DialogContent>
+            <DialogHeader>
+            <DialogTitle>Enter new ingredients to your pantry</DialogTitle>
+                    <DialogDescription>
+                        This action cannot be undone. This will permanently delete your account
+                        and remove your data from our servers.
+                    </DialogDescription>
+                </DialogHeader>
+                <form 
         onSubmit={handleSubmit(data => {
             const ingredientAlreadyExistsIndex = ingredients.findIndex(
                 (ingredient) => ingredient.name === data.ingredientName && ingredient.measure === data.ingredientMeasure
@@ -56,8 +76,8 @@ const PantryList = ({ingredientList, updatePantryListIngredients}) => {
             <input {...register("ingredientMeasure")} />
             <input type="submit" />
         </form>
-        
-    </>
+            </DialogContent>    
+        </Dialog>
     );
 }
 export default PantryList;

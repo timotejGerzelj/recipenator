@@ -37,7 +37,7 @@ async fn main() -> std::io::Result<()> {
     HttpServer::new(move ||
         App::new()
             .app_data(app_data.clone())
-            .configure(api::ingredients::config)
+            .configure(api::config::config)
             .service(healthcheck)
             .default_service(web::route().to(not_found))
             .wrap(            

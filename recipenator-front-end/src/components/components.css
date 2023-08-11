@@ -1,0 +1,17 @@
+.dialog-header {
+    cursor: grab;
+    padding: 8px;
+    background-color: #f0f0f0;
+    border-bottom: 1px solid #ccc;
+  }
+  .modal {
+    max-width: 50ch;
+    & > * {
+      margin: 0 0 0.5rem 0;
+    }
+  }
+.button:hover,
+.button:focus {
+    background: var(--cyan-9);
+  }
+  
