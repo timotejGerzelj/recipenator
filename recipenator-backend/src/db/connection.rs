@@ -61,16 +61,13 @@ impl Database {
         let mut updated_count = 0;
 
         for updated_row in updated_pantry_rows {
-            /* 
-            let filter_condition = pantry_ingredients_table
+            let _ = diesel::update(pantry_ingredients_table)
             .filter(pantry_id.eq(&updated_row.pantry_id))
-            .filter(ingredient_id.eq(&updated_row.ingredient_id));
-            */
-            let num_updated = diesel::update(pantry_ingredients_table)
-            .set(updated_row)
+            .filter(ingredient_id.eq(&updated_row.ingredient_id))
+            .set(quantity.eq(updated_row.quantity))
             .execute(&mut self.pool.get().unwrap());
         }
-        return Ok(updated_count);
+        return Ok(1);
     }
     
     pub fn create_pantry_ingredient(&self, new_pantry_ingredient: PantryIngredientsTable) -> Result<PantryIngredientsTable, Error> {

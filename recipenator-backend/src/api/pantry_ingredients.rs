@@ -9,8 +9,17 @@ use actix_web::{
     web::Json,
     web::{Data, self},
     HttpResponse};
+use serde::Deserialize;
 
 use crate::{db::connection::Database, models::recipe::PantryIngredientsTable};
+
+#[derive(Deserialize)]
+struct PathParams {
+    pantry_id: String,
+    ingredient_id: String,
+}
+
+
 
 #[post("/pantry/ingredient")]
 pub async fn create_pantry_ingredient(db: web::Data<Database>, new_pantry_ingredient: web::Json<PantryIngredientsTable>) -> HttpResponse{
@@ -37,8 +46,8 @@ pub async fn update_pantry_ingredients(db: web::Data<Database>,
 }
 
 #[delete("/pantry/{pantry_id}/{ingredient_id}/ingredient")]
-pub async fn delete_pantry_ingredient(db: web::Data<Database>,  pantry_id: web::Path<String>, ingredient_id: web::Path<String>) -> HttpResponse  {
-    let pantry_ingredients = db.delete_pantry_ingredient(&pantry_id, &ingredient_id);
+pub async fn delete_pantry_ingredient(db: web::Data<Database>,  path_params: web::Path<PathParams>) -> HttpResponse  {
+    let pantry_ingredients = db.delete_pantry_ingredient(&path_params.pantry_id, &path_params.ingredient_id);
     match pantry_ingredients {
         Some(_) => HttpResponse::Ok().finish(),
         None => HttpResponse::NotFound().body("pantry not found"),
