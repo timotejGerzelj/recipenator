@@ -1,1 +1,1 @@
-pub mod recipe;
+pub mod models;

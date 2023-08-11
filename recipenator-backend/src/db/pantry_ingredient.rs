@@ -1,7 +1,7 @@
 use diesel::{RunQueryDsl, QueryDsl, ExpressionMethods};
 use std::fmt::Error;
 use super::Database;
-use crate::models::recipe::PantryIngredientsTable;
+use crate::models::models::PantryIngredientsTable;
 
 impl Database {
     pub fn get_pantry_ingredients(&self) -> Vec<PantryIngredientsTable> {

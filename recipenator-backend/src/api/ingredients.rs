@@ -16,7 +16,14 @@ use actix_web::{
 use serde::{Serialize, Deserialize};
 use derive_more::{Display};
 
-use crate::{models::recipe::{Ingredient}, db::Database};
+use crate::{models::models::{Ingredient}, db::Database};
+
+#[derive(Deserialize)]
+struct PathParams {
+    ingredient_id: String,
+}
+
+
 #[post("/ingredient")]
 pub async fn create_ingredient(db: web::Data<Database>, new_ingredient: web::Json<Ingredient>) -> HttpResponse {
     let ingredient = db.create_ingredient(new_ingredient.into_inner());
@@ -30,3 +37,20 @@ pub async fn get_ingredients(db: web::Data<Database>) -> HttpResponse {
     HttpResponse::Ok().json(recipes)
 }
 
+#[delete("/ingredient/{ingredient_id}")]
+pub async fn delete_ingredient(db: web::Data<Database>, path_param: web::Path<PathParams>) -> HttpResponse {
+    let pantry_ingredients = db.delete_ingredient(&path_param.ingredient_id);
+    match pantry_ingredients {
+        Some(_) => HttpResponse::Ok().finish(),
+        None => HttpResponse::NotFound().body("pantry ingredient not found"),
+    }
+}
+
+#[put("/ingredient")]
+pub async fn update_ingredient(db: web::Data<Database>, updated_ingredient: web::Json<Ingredient>) -> HttpResponse {
+    let pantry_ingredients = db.update_ingredient(updated_ingredient.into_inner());
+    match pantry_ingredients {
+        Ok(updated_ingredient) => HttpResponse::Ok().json(updated_ingredient),
+        Err(_) => HttpResponse::InternalServerError().body("Error updating ingredient"),
+    }
+}

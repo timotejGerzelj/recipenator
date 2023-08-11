@@ -11,7 +11,7 @@ use actix_web::{
     HttpResponse};
 use serde::Deserialize;
 
-use crate::{db::database::Database, models::recipe::PantryIngredientsTable};
+use crate::{db::database::Database, models::models::PantryIngredientsTable};
 
 #[derive(Deserialize)]
 struct PathParams {
@@ -40,10 +40,11 @@ pub async fn update_pantry_ingredients(db: web::Data<Database>,
     updated_rows: Json<Vec<PantryIngredientsTable>>) -> HttpResponse {
     let updated_count =  db.update_pantry_ingredients(updated_rows.into_inner());
     match updated_count {
-        Ok(updated_count) => HttpResponse::Ok().json(updated_count),
+        Ok(_) => HttpResponse::Ok().finish(),
         Err(err) => HttpResponse::InternalServerError().body(err.to_string()),
     }
 }
+
 
 #[delete("/pantry/{pantry_id}/{ingredient_id}/ingredient")]
 pub async fn delete_pantry_ingredient(db: web::Data<Database>,  path_params: web::Path<PathParams>) -> HttpResponse  {

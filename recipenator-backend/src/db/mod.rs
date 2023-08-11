@@ -5,7 +5,7 @@ use std::env;
 use diesel::r2d2;
 use diesel::r2d2::ConnectionManager;
 use crate::api::ingredients;
-use crate::models::recipe::{Ingredient, PantryIngredientsTable};
+use crate::models::models::{Ingredient, PantryIngredientsTable};
 
 
 
