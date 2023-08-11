@@ -1,21 +1,18 @@
 # Mamma Mia (or the Recipenator not sure yet)
 
-A recipe planner that helps you work with what you have in your pantry.
+The main goal of this project is going to be to provide an easy and simple way for a lazy person that is bad at cooking (eg. me) to schedule when and how to cook 3 meals a day for a set amount of days with just the ingredients inside of your pantry. 
+
 
 ## Table of Contents
 
 - [Getting Started](#getting-started)
   - [Prerequisites](#prerequisites)
   - [Installation](#installation)
-- [Usage](#usage)
-- [Features](#features)
-- [Contributing](#contributing)
 - [License](#license)
-- [Contact](#contact)
 
 
 ### Get started
-To Mamma Mia you will need: React, and TailwindCSS for front-end, and Rust and its libraries, diesel for ORM and Actix for handling of HTTP requests for back-end.
+Mamma Mia uses: React and TailwindCSS for front-end, and Rust and its libraries: Diesel for ORM and query building and Actix for handling of HTTP requests.
 
 ### Installation
 
@@ -27,6 +24,8 @@ To Mamma Mia you will need: React, and TailwindCSS for front-end, and Rust and i
      node -v
      npm -v
      ```
+    - **Minimum required Node.js version would ideally be: 14.x**
+
 2. Clone the repository:
     ```
     git clone <repository-url>
@@ -67,13 +66,6 @@ To Mamma Mia you will need: React, and TailwindCSS for front-end, and Rust and i
 8. Start the Actix server:
 cargo run
 9. Access the back-end API at http://localhost:8080
-
-## About
-
-A reason i started this project is for me to sharpen my skills as a web developer but also to learn Rust, while I get its not as popular or optimal as far as programming languages for web development go, I really don't care.
-
-The main goal of this project is going to be to provide an easy and simple way for a lazy person that is bad at cooking (eg. me) to schedule when and how to cook 3 meals a day for a set amount of days with just the ingredients inside of your pantry. 
-
 
 ## License
 
