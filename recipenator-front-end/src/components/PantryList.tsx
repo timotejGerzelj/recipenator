@@ -1,15 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import UpdateRecipe from './UpdateRecipe';
-import { Ingredient, Recipe } from '../types/interfaces';
-import { useForm, useFieldArray } from "react-hook-form";
+import { Ingredient } from '../types/interfaces';
+import useForm  from "react-hook-form";
 import {
     Dialog,
     DialogContent,
-    DialogDescription,
-    DialogHeader,
-    DialogTitle,
     DialogTrigger,
   } from "../../@/components/ui/dialog"
+import { postIngredient } from '../services/Ingredients';
   
 
 
@@ -25,16 +22,16 @@ const PantryList = ({ingredientList, updatePantryListIngredients}) => {
     useEffect(() => {
         setIngredients(ingredientList);
       }, [ingredientList]);
-    function ingredientAdd(ingrName: string, ingrAmount: number, ingrMeasure: string){
-        const newIngredient: Ingredient = {name: ingrName,quantity: ingrAmount,measure: ingrMeasure}
-        console.log(newIngredient);
-        let ingredientsArr = [...ingredients];
-        ingredientsArr.push(newIngredient);
-        setIngredients(oldArray => [...oldArray, newIngredient]);
+    async function ingredientAdd(ingrName: string, ingrAmount: number, ingrMeasure: string){
+        const newIngredient: Ingredient = {ingredient_name: ingrName, quantity: ingrAmount, unit: ingrMeasure}
+        const ingredient = await postIngredient(newIngredient);
+        setIngredients(oldArray => [...oldArray, ingredient]);
         console.log("ingredients: ", ingredients)
         updatePantryListIngredients([...ingredients, newIngredient]);
     }
+    async function handleDelete(id: string) {
 
+    }
     function ingredientUpdate(ingrAmount: number, index: number) {
         const updatedIngredients = [...ingredients];
         updatedIngredients[index].quantity += ingrAmount;
@@ -48,17 +45,11 @@ const PantryList = ({ingredientList, updatePantryListIngredients}) => {
         <Dialog>
         <DialogTrigger>Update pantry</DialogTrigger>
         <DialogContent>
-            <DialogHeader>
-            <DialogTitle>Enter new ingredients to your pantry</DialogTitle>
-                    <DialogDescription>
-                        This action cannot be undone. This will permanently delete your account
-                        and remove your data from our servers.
-                    </DialogDescription>
-                </DialogHeader>
+
                 <form 
         onSubmit={handleSubmit(data => {
             const ingredientAlreadyExistsIndex = ingredients.findIndex(
-                (ingredient) => ingredient.name === data.ingredientName && ingredient.measure === data.ingredientMeasure
+                (ingredient) => ingredient.ingredient_name === data.ingredientName
             );
             console.log(data, ingredientAlreadyExistsIndex, ingredients)
             if (ingredientAlreadyExistsIndex === -1) {
@@ -76,6 +67,13 @@ const PantryList = ({ingredientList, updatePantryListIngredients}) => {
             <input {...register("ingredientMeasure")} />
             <input type="submit" />
         </form>
+        <ul>
+        {ingredients.map((ing, index) => (
+          <li key={index}>
+            {ing.ingredient_name} - {ing.quantity} {ing.unit} <button onClick={() => handleDelete(ing.ingredient_name)}>Delete</button>
+          </li>
+        ))}
+      </ul>
             </DialogContent>    
         </Dialog>
     );

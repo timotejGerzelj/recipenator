@@ -10,7 +10,7 @@ export interface Pantry {
 }
 
 export interface Ingredient {
-  name: string,
+  ingredient_name: string,
   quantity: number,
-  measure: string
+  unit: string
 }

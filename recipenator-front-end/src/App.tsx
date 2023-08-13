@@ -3,47 +3,41 @@ import './App.css'
 import PantryList from './components/PantryList';
 import { Ingredient, Pantry as PantryType } from './types/interfaces';
 import RecipeFind from './components/RecipeFind';
+import { getIngredients } from './services/Ingredients';
 
 function App() {
   const [pantry, setPantry] = useState<PantryType>({ ingredients: [] });
   const [currentView, setCurrentView] = useState('');
+  const [ingredients, setIngredients] = useState<Ingredient[]>([]);
+
   const updatePantryIngredients = (updatedIngredients: Ingredient[]) => {
     console.log("updated ingredients: ", updatedIngredients)
-    setPantry((prevPantry) => ({
-      ...prevPantry,
-      ingredients: updatedIngredients,
-    }));
+    setIngredients(updatedIngredients);
   };
-  const setNewView = (view: string) => {
-    setCurrentView(view);
-  };
-  const renderView = () => {
-    switch (currentView) {
-      case 'pantryList':
-        return <PantryList
-        ingredientList={pantry.ingredients}
-        updatePantryListIngredients={updatePantryIngredients}
-      />
-      case 'recipe':
-        return <RecipeFind ingredientsList={
-          pantry.ingredients
-        } />
+  useEffect(() => {
+    async function loadIngredients() {
+      try {
+        const fetchedIngredients = await getIngredients();
+        setIngredients(fetchedIngredients);        
+      }
+      catch (error) {
+        console.error('Error fetching ingredients:', error);
+      }
     }
-  }
-/*        <button onClick={() => setNewView('pantryList')}>Update Pantry List</button>
-        <button onClick={() => setNewView('recipe')}>Find Recipe</button>
-        <div>{renderView()}</div>*/
+    loadIngredients();
+  }, []);
+  
   return (
     <>
         <PantryList
-        ingredientList={pantry.ingredients}
+        ingredientList={ingredients}
         updatePantryListIngredients={updatePantryIngredients}/><br/>
         <RecipeFind ingredientsList={
-          pantry.ingredients}/>
+          ingredients}/>
       <ul>
-        {pantry.ingredients.map((ing, index) => (
+        {ingredients.map((ing, index) => (
           <li key={index}>
-            {ing.name} - {ing.quantity} {ing.measure}
+            {ing.ingredient_name} - {ing.quantity} {ing.unit}
           </li>
         ))}
       </ul>
