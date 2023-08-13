@@ -5,7 +5,7 @@ use std::env;
 use diesel::r2d2;
 use diesel::r2d2::ConnectionManager;
 use crate::api::ingredients;
-use crate::models::models::{Ingredient, PantryIngredientsTable};
+use crate::models::models::{Ingredient};
 
 
 
@@ -37,6 +37,4 @@ pub mod database {
 }
 
 pub mod ingredient;
-pub mod pantry_ingredient;
-
 pub use database::Database;

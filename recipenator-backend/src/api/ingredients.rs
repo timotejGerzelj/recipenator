@@ -46,8 +46,8 @@ pub async fn delete_ingredient(db: web::Data<Database>, path_param: web::Path<Pa
     }
 }
 
-#[put("/ingredient")]
-pub async fn update_ingredient(db: web::Data<Database>, updated_ingredient: web::Json<Ingredient>) -> HttpResponse {
+#[put("/ingredients")]
+pub async fn update_ingredient(db: web::Data<Database>, updated_ingredient: Json<Vec<Ingredient>>) -> HttpResponse {
     let pantry_ingredients = db.update_ingredient(updated_ingredient.into_inner());
     match pantry_ingredients {
         Ok(updated_ingredient) => HttpResponse::Ok().json(updated_ingredient),

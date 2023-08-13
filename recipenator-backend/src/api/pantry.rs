@@ -16,7 +16,6 @@ use crate::{db::database::Database, models::models::PantryIngredientsTable};
 #[derive(Deserialize)]
 struct PathParams {
     pantry_id: String,
-    ingredient_id: String,
 }
 
 

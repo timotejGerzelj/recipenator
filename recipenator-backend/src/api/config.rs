@@ -1,7 +1,8 @@
 use actix_web::web;
 
 use crate::api::ingredients::{create_ingredient, get_ingredients};
-use crate::api::pantry_ingredients::{get_pantry_ingredients, update_pantry_ingredients, create_pantry_ingredient, delete_pantry_ingredient};
+
+use super::ingredients::{delete_ingredient, update_ingredient};
 
 
 pub fn config(cfg: &mut web::ServiceConfig) {
@@ -9,9 +10,7 @@ pub fn config(cfg: &mut web::ServiceConfig) {
         web::scope("/api")
             .service(create_ingredient)
             .service(get_ingredients)
-            .service(get_pantry_ingredients)
-            .service(update_pantry_ingredients)
-            .service(create_pantry_ingredient)
-            .service(delete_pantry_ingredient)
+            .service(delete_ingredient)
+            .service(update_ingredient)
 );
 }
