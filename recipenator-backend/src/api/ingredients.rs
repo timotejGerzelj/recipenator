@@ -38,11 +38,11 @@ pub async fn get_ingredients(db: web::Data<Database>) -> HttpResponse {
 }
 
 #[delete("/ingredient/{ingredient_id}")]
-pub async fn delete_ingredient(db: web::Data<Database>, path_param: web::Path<PathParams>) -> HttpResponse {
-    let pantry_ingredients = db.delete_ingredient(&path_param.ingredient_id);
+pub async fn delete_ingredient(db: web::Data<Database>, id: web::Path<PathParams>) -> HttpResponse {
+    let pantry_ingredients = db.delete_ingredient(&id.ingredient_id);
     match pantry_ingredients {
-        Some(_) => HttpResponse::Ok().finish(),
-        None => HttpResponse::NotFound().body("pantry ingredient not found"),
+        Ok(_) => HttpResponse::Ok().finish(),
+        Err(e) => HttpResponse::NotFound().body("pantry ingredient not found"),
     }
 }
 

@@ -24,14 +24,14 @@ impl Database {
             .load::<Ingredient>(&mut self.pool.get().unwrap())
             .expect("Error loading all todos")
     }
-    pub fn delete_ingredient(&self, ingredient_id: &String) -> Option<usize> {
+    pub fn delete_ingredient(&self, ingredient_id_to_delete: &String) -> Result<bool, Error> {
         use crate::schema::ingredient::dsl::*;
 
-        let num_deleted = diesel::delete(ingredient.find(ingredient_id))
+        let num_deleted = diesel::delete(ingredient.find(ingredient_id_to_delete))
         .execute(&mut self.pool.get().unwrap())
         .expect("Error deleting Ingredient");
         println!("{}", num_deleted);
-        return Some(num_deleted)
+        return Ok(true)
     }
     pub fn update_ingredient(&self, updated_ingredients: Vec<Ingredient>) -> Result<i64, Error> {
         use crate::schema::ingredient::dsl::*;
@@ -42,6 +42,7 @@ impl Database {
             .set((ingredient_name.eq(updated_row.ingredient_name), unit.eq(updated_row.unit), quantity.eq(updated_row.quantity)))
             .execute(&mut self.pool.get().unwrap());
         }
+
         return Ok(updated_count);
     }
 }

@@ -1,4 +1,4 @@
-import { Ingredient } from "../types/interfaces";
+import { Ingredient, newIngredient } from "../types/interfaces";
 
 const API_BASE_URL = 'http://localhost:8080/api'; // Replace with your API base URL
 
@@ -21,7 +21,7 @@ export async function getIngredients(): Promise<Ingredient[]> {
 };
 
 
-export async function postIngredient(newIngredient: Ingredient) : Promise<Ingredient> {
+export async function postIngredient(newIngredient: newIngredient) : Promise<Ingredient> {
   try {
     const response = await fetch(`${API_BASE_URL}/ingredient`, {
       method: 'POST',
@@ -45,11 +45,17 @@ export async function postIngredient(newIngredient: Ingredient) : Promise<Ingred
 export async function deleteIngredient(id: string) {
     try {
         const response = await fetch(`${API_BASE_URL}/ingredient/${id}`, {
-              method: 'DELETE',
+            method: 'DELETE',
         });
+
+        if (!response.ok) {
+            throw new Error('Failed to delete ingredient');
+        }
+
         return response;
     }
     catch (error) {
         console.error('Error deleting ingredient', error);
+        throw error;
     }
 }

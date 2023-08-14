@@ -10,6 +10,12 @@ export interface Pantry {
 }
 
 export interface Ingredient {
+  ingredient_id: string,
+  ingredient_name: string,
+  quantity: number,
+  unit: string
+}
+export interface newIngredient {
   ingredient_name: string,
   quantity: number,
   unit: string

@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { Ingredient } from '../types/interfaces';
-import useForm  from "react-hook-form";
+import { Ingredient, newIngredient } from '../types/interfaces';
+import { useForm } from "react-hook-form";
 import {
     Dialog,
     DialogContent,
     DialogTrigger,
   } from "../../@/components/ui/dialog"
-import { postIngredient } from '../services/Ingredients';
+import { deleteIngredient, postIngredient } from '../services/Ingredients';
   
 
 
@@ -23,14 +23,24 @@ const PantryList = ({ingredientList, updatePantryListIngredients}) => {
         setIngredients(ingredientList);
       }, [ingredientList]);
     async function ingredientAdd(ingrName: string, ingrAmount: number, ingrMeasure: string){
-        const newIngredient: Ingredient = {ingredient_name: ingrName, quantity: ingrAmount, unit: ingrMeasure}
+        const newIngredient: newIngredient = {ingredient_name: ingrName, quantity: ingrAmount, unit: ingrMeasure}
         const ingredient = await postIngredient(newIngredient);
         setIngredients(oldArray => [...oldArray, ingredient]);
         console.log("ingredients: ", ingredients)
         updatePantryListIngredients([...ingredients, newIngredient]);
     }
     async function handleDelete(id: string) {
-
+        console.log(id);
+        try {
+            await deleteIngredient(id);
+            setIngredients((prevIngredients) =>
+            prevIngredients.filter((ingredient) => ingredient.ingredient_id !== id)
+          );
+    
+        }
+        catch (error) {
+            console.error("Error deleting ingredient:", error);
+        }
     }
     function ingredientUpdate(ingrAmount: number, index: number) {
         const updatedIngredients = [...ingredients];
@@ -70,7 +80,7 @@ const PantryList = ({ingredientList, updatePantryListIngredients}) => {
         <ul>
         {ingredients.map((ing, index) => (
           <li key={index}>
-            {ing.ingredient_name} - {ing.quantity} {ing.unit} <button onClick={() => handleDelete(ing.ingredient_name)}>Delete</button>
+            {ing.ingredient_name} - {ing.quantity} {ing.unit} <button onClick={() => handleDelete(ing.ingredient_id)}>Delete</button>
           </li>
         ))}
       </ul>
