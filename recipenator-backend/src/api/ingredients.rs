@@ -38,8 +38,8 @@ pub async fn get_ingredients(db: web::Data<Database>) -> HttpResponse {
 }
 
 #[delete("/ingredient/{ingredient_id}")]
-pub async fn delete_ingredient(db: web::Data<Database>, id: web::Path<PathParams>) -> HttpResponse {
-    let pantry_ingredients = db.delete_ingredient(&id.ingredient_id);
+pub async fn delete_ingredient(db: web::Data<Database>, path_params: web::Path<PathParams>) -> HttpResponse {
+    let pantry_ingredients = db.delete_ingredient(&path_params.ingredient_id);
     match pantry_ingredients {
         Ok(_) => HttpResponse::Ok().finish(),
         Err(e) => HttpResponse::NotFound().body("pantry ingredient not found"),
@@ -47,10 +47,19 @@ pub async fn delete_ingredient(db: web::Data<Database>, id: web::Path<PathParams
 }
 
 #[put("/ingredients")]
-pub async fn update_ingredient(db: web::Data<Database>, updated_ingredient: Json<Vec<Ingredient>>) -> HttpResponse {
-    let pantry_ingredients = db.update_ingredient(updated_ingredient.into_inner());
+pub async fn update_ingredients(db: web::Data<Database>, updated_ingredient: Json<Vec<Ingredient>>) -> HttpResponse {
+    let pantry_ingredients = db.update_ingredients(updated_ingredient.into_inner());
     match pantry_ingredients {
         Ok(updated_ingredient) => HttpResponse::Ok().json(updated_ingredient),
+        Err(_) => HttpResponse::InternalServerError().body("Error updating ingredients"),
+    }
+}
+
+#[put("/ingredient")]
+pub async fn update_ingredient(db: web::Data<Database>, update_ingredient: web::Json<Ingredient>) -> HttpResponse {
+    let update_ingredient = db.update_ingredient(update_ingredient.into_inner());
+    match update_ingredient {
+        Ok(update_ingredient) => HttpResponse::Ok().json(update_ingredient),
         Err(_) => HttpResponse::InternalServerError().body("Error updating ingredient"),
     }
 }

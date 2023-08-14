@@ -59,3 +59,25 @@ export async function deleteIngredient(id: string) {
         throw error;
     }
 }
+
+export async function updateIngredient(updatedIngredient: Ingredient) : Promise<Ingredient> {
+    console.log("Ingredient to: ", updatedIngredient);
+    try {
+        const response = await fetch(`${API_BASE_URL}/ingredient`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(updatedIngredient),
+        });
+
+        if (!response.ok) {
+            throw new Error('Failed to update ingredient');
+        }
+        console.log(response)
+        return updatedIngredient;
+    } catch (error) {
+        console.error('Error updating ingredient', error);
+        throw error;
+    }
+}

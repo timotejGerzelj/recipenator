@@ -6,7 +6,7 @@ import {
     DialogContent,
     DialogTrigger,
   } from "../../@/components/ui/dialog"
-import { deleteIngredient, postIngredient } from '../services/Ingredients';
+import { deleteIngredient, postIngredient, updateIngredient } from '../services/Ingredients';
   
 
 
@@ -17,8 +17,11 @@ interface PantryListProps {
   
 
 const PantryList = ({ingredientList, updatePantryListIngredients}) => {
-    const { register, handleSubmit } = useForm();
+    const { register, getValues, handleSubmit } = useForm();
     const [ ingredients, setIngredients ] = useState<Ingredient[]>([]);
+
+
+
     useEffect(() => {
         setIngredients(ingredientList);
       }, [ingredientList]);
@@ -29,44 +32,33 @@ const PantryList = ({ingredientList, updatePantryListIngredients}) => {
         console.log("ingredients: ", ingredients)
         updatePantryListIngredients([...ingredients, newIngredient]);
     }
-    async function handleDelete(id: string) {
-        console.log(id);
-        try {
-            await deleteIngredient(id);
-            setIngredients((prevIngredients) =>
-            prevIngredients.filter((ingredient) => ingredient.ingredient_id !== id)
-          );
-    
-        }
-        catch (error) {
-            console.error("Error deleting ingredient:", error);
-        }
-    }
     function ingredientUpdate(ingrAmount: number, index: number) {
         const updatedIngredients = [...ingredients];
         updatedIngredients[index].quantity += ingrAmount;
-        console.log("Ingredient update", updatedIngredients);
+        const updateIngr: Ingredient = {
+            ingredient_id: updatedIngredients[index].ingredient_id,
+            ingredient_name: updatedIngredients[index].ingredient_name,
+            quantity: updatedIngredients[index].quantity,
+            unit: updatedIngredients[index].unit
+          }
+        updateIngredient(updateIngr);
         setIngredients(updatedIngredients);
         updatePantryListIngredients(ingredients);
     }
+
     return (
-    
-        
         <Dialog>
         <DialogTrigger>Update pantry</DialogTrigger>
         <DialogContent>
-
                 <form 
         onSubmit={handleSubmit(data => {
             const ingredientAlreadyExistsIndex = ingredients.findIndex(
                 (ingredient) => ingredient.ingredient_name === data.ingredientName
             );
-            console.log(data, ingredientAlreadyExistsIndex, ingredients)
             if (ingredientAlreadyExistsIndex === -1) {
                 ingredientAdd(data.ingredientName,parseInt(data.ingredientAmount), data.ingredientMeasure );
             }
             else {
-                console.log(data, ingredientAlreadyExistsIndex, ingredients)
                 ingredientUpdate(parseInt(data.ingredientAmount), ingredientAlreadyExistsIndex);
             }})}>
             <label htmlFor="ingredientName">The name of the ingredient:</label>
@@ -77,13 +69,6 @@ const PantryList = ({ingredientList, updatePantryListIngredients}) => {
             <input {...register("ingredientMeasure")} />
             <input type="submit" />
         </form>
-        <ul>
-        {ingredients.map((ing, index) => (
-          <li key={index}>
-            {ing.ingredient_name} - {ing.quantity} {ing.unit} <button onClick={() => handleDelete(ing.ingredient_id)}>Delete</button>
-          </li>
-        ))}
-      </ul>
             </DialogContent>    
         </Dialog>
     );

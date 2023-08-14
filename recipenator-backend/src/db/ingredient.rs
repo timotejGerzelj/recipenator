@@ -33,7 +33,7 @@ impl Database {
         println!("{}", num_deleted);
         return Ok(true)
     }
-    pub fn update_ingredient(&self, updated_ingredients: Vec<Ingredient>) -> Result<i64, Error> {
+    pub fn update_ingredients(&self, updated_ingredients: Vec<Ingredient>) -> Result<i64, Error> {
         use crate::schema::ingredient::dsl::*;
         let mut updated_count = 0;
         for updated_row in updated_ingredients {
@@ -44,5 +44,18 @@ impl Database {
         }
 
         return Ok(updated_count);
+    }
+    pub fn update_ingredient(&self, updated_ingredient: Ingredient) -> Result<Ingredient, Error> {
+        use crate::schema::ingredient::dsl::*;
+        let update_ingr_id = updated_ingredient.ingredient_id.clone();
+        let update_ingr_name = updated_ingredient.ingredient_name.clone();
+        let update_ingr_unit = updated_ingredient.unit.clone();
+        let update_ingr_quantity = updated_ingredient.quantity.clone();
+        diesel::update(ingredient.find(update_ingr_id))
+        .set((ingredient_name.eq(update_ingr_name), unit.eq(update_ingr_unit), quantity.eq(update_ingr_quantity)))
+        .returning(Ingredient::as_returning())
+        .get_result(&mut self.pool.get().unwrap())
+        .unwrap();
+        return Ok(updated_ingredient);
     }
 }
