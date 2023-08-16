@@ -6,7 +6,8 @@ export interface Recipe {
 }
 
 export interface Pantry {
-  ingredients: Ingredient[]
+  ingredients: Ingredient[],
+  recipePreferences: []
 }
 
 export interface Ingredient {
@@ -19,4 +20,10 @@ export interface newIngredient {
   ingredient_name: string,
   quantity: number,
   unit: string
+}
+
+
+export interface recipePreferences {
+  cuisine_type: string[],
+  restrictions: string[]
 }

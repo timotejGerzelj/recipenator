@@ -5,11 +5,10 @@ import { Ingredient, Pantry as PantryType } from './types/interfaces';
 import RecipeFind from './components/RecipeFind';
 import { deleteIngredient, getIngredients, updateIngredient } from './services/Ingredients';
 import { useForm } from 'react-hook-form';
+import { getRecipes } from './services/Recipes';
 
 function App() {
   const { register, reset, getValues } = useForm();
-  const [pantry, setPantry] = useState<PantryType>({ ingredients: [] });
-  const [currentView, setCurrentView] = useState('');
   const [ingredients, setIngredients] = useState<Ingredient[]>([]);
   const [editingIngredientId, setEditingIngredientId] = useState<string>("");
 
@@ -22,7 +21,7 @@ function App() {
     async function loadIngredients() {
       try {
         const fetchedIngredients = await getIngredients();
-        setIngredients(fetchedIngredients);        
+        setIngredients(fetchedIngredients); 
       }
       catch (error) {
         console.error('Error fetching ingredients:', error);

@@ -17,7 +17,7 @@ interface PantryListProps {
   
 
 const PantryList = ({ingredientList, updatePantryListIngredients}) => {
-    const { register, getValues, handleSubmit } = useForm();
+    const { register, handleSubmit } = useForm();
     const [ ingredients, setIngredients ] = useState<Ingredient[]>([]);
 
 
