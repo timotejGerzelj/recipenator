@@ -1,3 +1,5 @@
+use std::collections::HashMap;
+
 use crate::schema::{pantry, ingredient};
 use actix_web::cookie::time::Date;
 use diesel::prelude::*;
@@ -23,4 +25,11 @@ pub struct Ingredient {
     pub ingredient_name: String,
     pub quantity: i32,
     pub unit: String
+}
+
+pub struct Recipe {
+    label: String,
+    image: String,
+    recipe_url: String,
+    ingredients: HashMap<String, u64>,
 }

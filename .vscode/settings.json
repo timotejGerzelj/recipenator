@@ -1,0 +1,26 @@
+{
+    "rust-analyzer.linkedProjects": [
+        "./recipenator-backend/Cargo.toml",
+        "./recipenator-backend/Cargo.toml",
+        "./recipenator-backend/Cargo.toml",
+        "./recipenator-backend/Cargo.toml",
+        "./recipenator-backend/Cargo.toml",
+        "./recipenator-backend/Cargo.toml",
+        "./recipenator-backend/Cargo.toml",
+        "./recipenator-backend/Cargo.toml",
+        "./recipenator-backend/Cargo.toml",
+        "./recipenator-backend/Cargo.toml",
+        "./recipenator-backend/Cargo.toml",
+        "./recipenator-backend/Cargo.toml",
+        "./recipenator-backend/Cargo.toml",
+        "./recipenator-backend/Cargo.toml",
+        "./recipenator-backend/Cargo.toml",
+        "./recipenator-backend/Cargo.toml",
+        "./recipenator-backend/Cargo.toml",
+        "./recipenator-backend/Cargo.toml",
+        "./recipenator-backend/Cargo.toml",
+        "./recipenator-backend/Cargo.toml",
+        "./recipenator-backend/Cargo.toml"
+    ],
+    "rust-analyzer.showUnlinkedFileNotification": false
+}

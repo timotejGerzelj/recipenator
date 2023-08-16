@@ -2,17 +2,16 @@ mod schema;
 mod models;
 mod db;
 mod api;
+mod reqwests_calls;
 use std::io::{stdin, Read};
 
-use diesel::prelude::*;
 //use crate::models::Recipe;
 //use crate::ops::recipe_ops::{delete_recipe, update_recipe, create_recipe};
 use actix_web::{get, http, web::{self, post}, App, HttpRequest, HttpResponse, HttpServer, Responder, post, dev::Response};
-use actix_web::middleware::Logger;
 use actix_cors::Cors;
 use serde::Serialize;
 
-
+ 
 
 #[derive(Serialize)]
 pub struct GenericResponse {
