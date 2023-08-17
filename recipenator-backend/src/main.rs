@@ -9,6 +9,7 @@ use std::io::{stdin, Read};
 //use crate::ops::recipe_ops::{delete_recipe, update_recipe, create_recipe};
 use actix_web::{get, http, web::{self, post}, App, HttpRequest, HttpResponse, HttpServer, Responder, post, dev::Response};
 use actix_cors::Cors;
+use reqwests_calls::edamam::process_edamam_data;
 use serde::Serialize;
 
  
@@ -32,7 +33,9 @@ async fn not_found() -> HttpResponse {
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
     let recipe_db = db::database::Database::establish_connection();
+
     let app_data = web::Data::new(recipe_db);
+    
     HttpServer::new(move ||
         App::new()
             .app_data(app_data.clone())

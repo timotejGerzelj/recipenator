@@ -17,7 +17,7 @@ use serde::{Serialize, Deserialize};
 use derive_more::{Display};
 
 use crate::{models::models::{Ingredient}, db::Database};
-
+use crate::reqwests_calls::edamam::process_edamam_data;
 #[derive(Deserialize)]
 struct PathParams {
     ingredient_id: String,
@@ -62,4 +62,21 @@ pub async fn update_ingredient(db: web::Data<Database>, update_ingredient: web::
         Ok(update_ingredient) => HttpResponse::Ok().json(update_ingredient),
         Err(_) => HttpResponse::InternalServerError().body("Error updating ingredient"),
     }
+}
+
+#[get("/ingredients/recipes")]
+pub async fn find_match_recipes(db: web::Data<Database>) -> HttpResponse {
+    let ingredients = db.get_ingredients();
+    let recipes = process_edamam_data(ingredients).await;
+    match recipes {
+        Ok(recipes_value) => {
+            let recipes_json: serde_json::Value = serde_json::from_value(recipes_value).unwrap();
+            HttpResponse::Ok().json(recipes_json)
+        }
+        Err(_) => {
+            // Handle the error case
+            HttpResponse::InternalServerError().finish()
+        }
+    }
+
 }
