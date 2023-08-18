@@ -1,21 +1,17 @@
 
+const API_BASE_URL = 'http://localhost:8080/api'; // Replace with your API base URL
 
 
 
-export async function getRecipes(data: string) : Promise<JSON> {
+export async function getRecipes(data_to_send: string) : Promise<JSON> {
     try {
-        console.log(data);
-        const queryParams = new URLSearchParams();
-        queryParams.set('app_id', import.meta.env.VITE_APP_ID || '');
-        queryParams.set('app_key', import.meta.env.VITE_APP_KEY || '');
-        queryParams.set('q', data);
-        const url = `https://api.edamam.com/search?${queryParams.toString()}`;
-        const response = await fetch(url);
+        const response = await fetch(`${API_BASE_URL}/ingredients/recipes/${data_to_send}`);
         if (!response.ok) {
-            throw new Error('Error fetching recipes');
+            throw new Error('Failed to fetch pantry ingredients');
         }
-        const responseData = await response.json();
-        return responseData;
+        const data = await response.json();
+        console.log(data);
+        return data;
     }
     catch(error){
         throw error;

@@ -13,23 +13,26 @@ import { getRecipes } from "../services/Recipes";
   
 
 const RecipeFind = ({ingredientsList}) => {
-    const { register, handleSubmit } = useForm();
-    const { recipes, setRecipes } = useState([]);
-    useEffect(() => {
-        const allIngredients = ingredientsList.map((ingredient:Ingredient) => ingredient.ingredient_name.toLowerCase() ).join(',');
-
-        async function fetchRecipesWithIngredients(allIngredients: string) {
-            try {
-                console.log("Hello World");
-                const fetchedRecipes = await getRecipes(allIngredients);        
-                console.log("My recipes: ", fetchedRecipes);
-              }
-              catch (error) {
-                console.error('Error fetching ingredients:', error);
-              }
+    const [selectedIngredients, setSelectedIngredients] = useState<string[]>([]);
+//    const { recipes, setRecipes } = useState([]);
+    const handleIngredientChange = (event) => {
+        const { value, checked } = event.target;
+        console.log(value, checked);
+        if (checked) {
+          setSelectedIngredients((prevSelected: string[]) => [...prevSelected, value]);
+          console.log(selectedIngredients)
+        } else {
+          setSelectedIngredients((prevSelected) =>
+            prevSelected.filter((ingredient) => ingredient !== value)
+          );
         }
-        fetchRecipesWithIngredients(allIngredients);
-    });
+
+      };
+    const handleGetRecipes = () => {
+        let formatRequestParam = selectedIngredients.join(',')
+        getRecipes(formatRequestParam);
+    }
+
     return (
         <Dialog>
         <DialogTrigger>Find a Recipe</DialogTrigger>
@@ -37,32 +40,30 @@ const RecipeFind = ({ingredientsList}) => {
             <DialogHeader>
             <DialogTitle>Search for the recipe of your choice</DialogTitle>
                 </DialogHeader>
-                <form>
-                    <div>
-                        <label>Dietary Preferences:</label>
-                        
-                        <input
-                            type="checkbox"
-                                {...register('vegan')}
-                                /> Vegan
-                            <input
-                                type="checkbox"
-                                {...register('vegetarian')}
-                                /> Vegetarian
-                             <input
-                                type="checkbox"
-                                {...register('omnivore')}
-                                /> Omnivore
-                                  <div>
-                                <label>Ethnicity:</label>
-                                    <select {...register('ethnicity')}>
-                                        <option value="">Preference</option>
-                                        <option value="indian">Indian</option>
-                                        <option value="chinese">Chinese</option>
-                                    </select>
-                                </div>
-                            </div>
-                </form>
+                <div>
+      <h2>Select Ingredients</h2>
+      <ul>
+      {ingredientsList.map((ing: Ingredient, index: number) => (
+        <li key={ing.ingredient_id}>
+            <label>
+              <input
+                type="checkbox"
+                value={ing.ingredient_name}
+                onChange={handleIngredientChange}
+              />
+              {ing.ingredient_name}
+            </label>
+        </li>
+      ))}
+      </ul>
+      <h3>Selected Ingredients:</h3>
+      <ul>
+        {selectedIngredients.map((ingredient: string, index: number) => (
+          <li key={index}>{ingredient}</li>
+        ))}
+      </ul>
+    </div>
+    <button onClick={handleGetRecipes}>Search for recipe</button>
             </DialogContent>    
         </Dialog>
     );

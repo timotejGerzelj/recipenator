@@ -1,7 +1,7 @@
 use actix_web::web;
 use reqwest;
 use std::{env, collections::HashMap};
-use crate::{models::{models::{Ingredient}, recipe_json::{RecipeResponse,RecipeHit,Recipe,Ingredient as IngredientJSON}}};
+use crate::{models::{models::{Ingredient, Recipe}}};
 extern crate serde_json;
 use serde_json::{Value, json};
 
@@ -52,11 +52,13 @@ fn recipe_form_ingredient_array(hit: &Value, existing_ingr: &Vec<String>) -> (St
                     if let Some(food) = ingredient.get("food") {
                         if let Some(food_str) = food.as_str() {
                             println!("Food: {}", food_str);
-                            if check_if_ingr_in_arr(existing_ingr.to_vec(), food_str.to_owned()) {
+                            /*if check_if_ingr_in_arr(existing_ingr.to_vec(), food_str.to_owned()) {
                                 ingredients_vec.push(food_str.to_owned());
                             } else {
                                 return ( String::new(),String::new(),String::new() ,false, Vec::new());
                             }
+                            */
+                            ingredients_vec.push(food_str.to_owned());
                         }
                     }
                 }
@@ -68,26 +70,20 @@ fn recipe_form_ingredient_array(hit: &Value, existing_ingr: &Vec<String>) -> (St
 }
 
 
-
-
-
-
-
-
-
-pub async fn process_edamam_data(ingredients: Vec<Ingredient>) -> Result<serde_json::Value, Box<dyn std::error::Error>> {
-    let concatenate_names: String = ingredients.iter()
-    .map(|ingredient| ingredient.ingredient_name.clone())
-    .collect::<Vec<String>>()
-    .join(",");
-    println!("Concatenated names: {}", concatenate_names);
-    let recipes = get_recipes(concatenate_names.clone()).await?;
+pub async fn process_edamam_data(ingredients: &String) -> Result<Vec<Recipe>, Box<dyn std::error::Error>> {
+    let recipes = get_recipes(ingredients.clone()).await?;
     let recipe_hits = recipes.get("hits").and_then(|v| v.as_array()).unwrap();
-    let ingredients: Vec<String> = concatenate_names.split(',').map(|s| s.to_string()).collect();
+    let ingredients: Vec<String> = ingredients.split(',').map(|s| s.to_string()).collect();
+    let mut recipes_to_use: Vec<Recipe> = Vec::new();
     for hit in recipe_hits {
-        let (label, img_url, url , is_fit ,ingredients) = recipe_form_ingredient_array(hit, &ingredients);
-        
+        let (label, img_url, url, is_fit, ingredients) = recipe_form_ingredient_array(hit, &ingredients);
+        let new_recipe = Recipe {
+            label: label,
+            image: img_url,
+            recipe_url: url,
+            ingredients: ingredients,
+        };
+        recipes_to_use.push(new_recipe);
     }
-
-    Ok(recipes)
+    Ok(recipes_to_use)
 }

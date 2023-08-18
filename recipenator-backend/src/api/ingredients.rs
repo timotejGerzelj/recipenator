@@ -22,6 +22,10 @@ use crate::reqwests_calls::edamam::process_edamam_data;
 struct PathParams {
     ingredient_id: String,
 }
+#[derive(Deserialize)]
+struct IngredientsQueryParam {
+    q: String,
+}
 
 
 #[post("/ingredient")]
@@ -64,17 +68,16 @@ pub async fn update_ingredient(db: web::Data<Database>, update_ingredient: web::
     }
 }
 
-#[get("/ingredients/recipes")]
-pub async fn find_match_recipes(db: web::Data<Database>) -> HttpResponse {
-    let ingredients = db.get_ingredients();
-    let recipes = process_edamam_data(ingredients).await;
+#[get("/ingredients/recipes/{q}")]
+pub async fn find_match_recipes(ingredients: web::Path<IngredientsQueryParam>) -> HttpResponse {
+    //let ingredients = db.get_ingredients();
+    let recipes = process_edamam_data(&ingredients.q).await;
     match recipes {
         Ok(recipes_value) => {
-            let recipes_json: serde_json::Value = serde_json::from_value(recipes_value).unwrap();
+            let recipes_json: serde_json::Value = serde_json::to_value(recipes_value).unwrap();
             HttpResponse::Ok().json(recipes_json)
         }
         Err(_) => {
-            // Handle the error case
             HttpResponse::InternalServerError().finish()
         }
     }

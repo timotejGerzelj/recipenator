@@ -51,16 +51,16 @@ const PantryList = ({ingredientList, updatePantryListIngredients}) => {
         <DialogTrigger>Update pantry</DialogTrigger>
         <DialogContent>
                 <form 
-        onSubmit={handleSubmit(data => {
-            const ingredientAlreadyExistsIndex = ingredients.findIndex(
-                (ingredient) => ingredient.ingredient_name === data.ingredientName
-            );
-            if (ingredientAlreadyExistsIndex === -1) {
-                ingredientAdd(data.ingredientName,parseInt(data.ingredientAmount), data.ingredientMeasure );
-            }
-            else {
-                ingredientUpdate(parseInt(data.ingredientAmount), ingredientAlreadyExistsIndex);
-            }})}>
+                    onSubmit={handleSubmit(data => {
+                    const ingredientAlreadyExistsIndex = ingredients.findIndex(
+                        (ingredient) => ingredient.ingredient_name === data.ingredientName
+                    );
+                    if (ingredientAlreadyExistsIndex === -1) {
+                        ingredientAdd(data.ingredientName,parseInt(data.ingredientAmount), data.ingredientMeasure );
+                    }
+                    else {
+                        ingredientUpdate(parseInt(data.ingredientAmount), ingredientAlreadyExistsIndex);
+                    }})}>
             <label htmlFor="ingredientName">The name of the ingredient:</label>
             <input  {...register("ingredientName")} />
             <label htmlFor="ingredientAmount">Ingredient amount:</label>

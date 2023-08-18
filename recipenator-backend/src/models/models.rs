@@ -26,10 +26,11 @@ pub struct Ingredient {
     pub quantity: i32,
     pub unit: String
 }
-
+#[derive(Serialize, Deserialize)]
 pub struct Recipe {
-    label: String,
-    image: String,
-    recipe_url: String,
-    ingredients: HashMap<String, u64>,
+    pub label: String,
+    pub image: String,
+    pub recipe_url: String,
+    pub ingredients: Vec<String>,
 }
+
