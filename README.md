@@ -63,9 +63,16 @@ Mamma Mia uses: React and TailwindCSS for front-end, and Rust and its libraries:
 
 7. Run database migrations to set up the initial schema:
     `diesel migration run`
+
 8. Start the Actix server:
 cargo run
+
 9. Access the back-end API at http://localhost:8080
+
+## Edamam API
+
+For looking up recipes MammaMia uses [Edamam API](https://www.edamam.com/), a web service for nutrition and food data.
+To run MammaMia on your own you will need to create the keys for [Edamam Recipe Search API](https://developer.edamam.com/edamam-recipe-api), once you have made the account paste your  ```APP_ID``` and ```APP_KEY``` in the `.env` file in root of recipenator-backend folder and you are good to go!
 
 ## License
 
