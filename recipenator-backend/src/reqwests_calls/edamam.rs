@@ -9,7 +9,7 @@ async fn get_recipes(data: String) -> Result<serde_json::Value, reqwest::Error> 
     let app_id = env::var("APP_ID").unwrap_or_default();
     let app_key = env::var("APP_KEY").unwrap_or_default();
     let url = format!(
-        "https://api.edamam.com/search?&app_id={}&app_key={}&q={}",
+        "https://api.edamam.com/search?&app_id={}&app_key={}&q={}&from=1&to=100&more=true",
          app_id, app_key, data
     );
     let response = reqwest::get(&url).await?.text().await?;
@@ -44,6 +44,7 @@ fn destructure_recipe_metadata(recipe: &Value) -> (String, String, String) {
 
 fn recipe_form_ingredient_array(hit: &Value, existing_ingr: &Vec<String>) -> (String,String,String, bool, Vec<String>) {
     let mut ingredients_vec: Vec<String> = Vec::new(); // Initialize the vector
+    let mut strikes = 0;
     if let Some(recipe) = hit.get("recipe") {
         let (label, img_url, url) = destructure_recipe_metadata(recipe);
         if let Some(ingredients) = recipe.get("ingredients") {
@@ -52,19 +53,23 @@ fn recipe_form_ingredient_array(hit: &Value, existing_ingr: &Vec<String>) -> (St
                     if let Some(food) = ingredient.get("food") {
                         if let Some(food_str) = food.as_str() {
                             println!("Food: {}", food_str);
-                            /*if check_if_ingr_in_arr(existing_ingr.to_vec(), food_str.to_owned()) {
+                            if check_if_ingr_in_arr(existing_ingr.to_vec(), food_str.to_owned()) {
                                 ingredients_vec.push(food_str.to_owned());
                             } else {
-                                return ( String::new(),String::new(),String::new() ,false, Vec::new());
+                                strikes += 1;
+                                if (strikes > 5){
+                                    return ( String::new(),String::new(),String::new() ,false, Vec::new());
+                                }
+                                else {
+                                    ingredients_vec.push(food_str.to_owned());
+                                }
                             }
-                            */
-                            ingredients_vec.push(food_str.to_owned());
                         }
                     }
                 }
             }
         }
-        return (label, img_url, url ,false, ingredients_vec);
+        return (label, img_url, url ,true, ingredients_vec);
     }
     (String::new(),String::new(),String::new(),false, Vec::new())
 }
@@ -76,7 +81,9 @@ pub async fn process_edamam_data(ingredients: &String) -> Result<Vec<Recipe>, Bo
     let ingredients: Vec<String> = ingredients.split(',').map(|s| s.to_string()).collect();
     let mut recipes_to_use: Vec<Recipe> = Vec::new();
     for hit in recipe_hits {
+        
         let (label, img_url, url, is_fit, ingredients) = recipe_form_ingredient_array(hit, &ingredients);
+        if (is_fit) {
         let new_recipe = Recipe {
             label: label,
             image: img_url,
@@ -84,6 +91,7 @@ pub async fn process_edamam_data(ingredients: &String) -> Result<Vec<Recipe>, Bo
             ingredients: ingredients,
         };
         recipes_to_use.push(new_recipe);
+    }
     }
     Ok(recipes_to_use)
 }
