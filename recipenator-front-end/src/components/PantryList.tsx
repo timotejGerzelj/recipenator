@@ -47,9 +47,7 @@ const PantryList = ({ingredientList, updatePantryListIngredients}) => {
     }
 
     return (
-        <Dialog>
-        <DialogTrigger>Update pantry</DialogTrigger>
-        <DialogContent>
+
                 <form 
                     onSubmit={handleSubmit(data => {
                     const ingredientAlreadyExistsIndex = ingredients.findIndex(
@@ -61,16 +59,15 @@ const PantryList = ({ingredientList, updatePantryListIngredients}) => {
                     else {
                         ingredientUpdate(parseInt(data.ingredientAmount), ingredientAlreadyExistsIndex);
                     }})}>
-            <label htmlFor="ingredientName">The name of the ingredient:</label>
-            <input  {...register("ingredientName")} />
-            <label htmlFor="ingredientAmount">Ingredient amount:</label>
-            <input {...register("ingredientAmount")} />
-            <label htmlFor="ingredientMeasure">Type of measure:</label>
-            <input {...register("ingredientMeasure")} />
-            <input type="submit" />
-        </form>
-            </DialogContent>    
-        </Dialog>
+                    <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white" htmlFor="ingredientName">The name of the ingredient:</label>
+                    <input className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"  {...register("ingredientName")} />
+                    <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white" htmlFor="ingredientAmount">Ingredient amount:</label>
+                    <input className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" {...register("ingredientAmount")} />
+                    <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white" htmlFor="ingredientMeasure">Type of measure:</label>
+                    <input className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" {...register("ingredientMeasure")} />
+                    <input className='px-3 py-1 rounded-full text-sm bg-transparent text-gray-500 hover:underline focus:outline-none' type="submit" />
+                </form>
+
     );
 }
 export default PantryList;

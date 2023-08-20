@@ -1,10 +1,3 @@
-export interface Recipe {
-    id: string,
-    name: string,
-    instructions: string,
-    ingredients: string,
-}
-
 export interface Pantry {
   ingredients: Ingredient[],
   recipePreferences: []
@@ -26,4 +19,11 @@ export interface newIngredient {
 export interface recipePreferences {
   cuisine_type: string[],
   restrictions: string[]
+}
+
+export interface Recipe {
+  image: string,
+  ingredients: string[],
+  label: string,
+  recipe_url: string
 }
