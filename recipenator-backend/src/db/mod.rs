@@ -1,9 +1,7 @@
 use std::fmt::Error;
 use diesel::prelude::*;
-use std::env;
 use diesel::r2d2;
 use diesel::r2d2::ConnectionManager;
-use crate::models::models::{Ingredient};
 
 
 
@@ -35,4 +33,5 @@ pub mod database {
 }
 
 pub mod ingredient;
+pub mod meal_scheduler;
 pub use database::Database;

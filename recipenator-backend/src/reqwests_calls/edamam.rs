@@ -81,7 +81,6 @@ pub async fn process_edamam_data(ingredients: &String) -> Result<Vec<Recipe>, Bo
     let ingredients: Vec<String> = ingredients.split(',').map(|s| s.to_string()).collect();
     let mut recipes_to_use: Vec<Recipe> = Vec::new();
     for hit in recipe_hits {
-        
         let (label, img_url, url, is_fit, ingredients) = recipe_form_ingredient_array(hit, &ingredients);
         if (is_fit) {
         let new_recipe = Recipe {

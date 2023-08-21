@@ -1,6 +1,6 @@
 use std::collections::HashMap;
 
-use crate::schema::{pantry, ingredient};
+use crate::schema::{pantry, ingredient, meal_schedule};
 use actix_web::cookie::time::Date;
 use diesel::prelude::*;
 use serde::{Serialize, Deserialize};
@@ -34,3 +34,10 @@ pub struct Recipe {
     pub ingredients: Vec<String>,
 }
 
+#[derive(Queryable, Selectable, Serialize, Deserialize, Debug, Insertable, AsChangeset)]
+#[diesel(table_name = meal_schedule)]
+#[diesel(check_for_backend(diesel::pg::Pg))]
+pub struct MealSchedule {
+    pub meal_schedule_id: String,
+    pub recipes: String,
+}

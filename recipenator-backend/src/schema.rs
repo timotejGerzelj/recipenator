@@ -20,6 +20,14 @@ diesel::table! {
 }
 
 diesel::table! {
+    meal_schedule (meal_schedule_id) {
+        #[max_length = 255]
+        meal_schedule_id -> Varchar,
+        recipes -> Text,
+    }
+}
+
+diesel::table! {
     pantries (pantry_id) {
         #[max_length = 255]
         pantry_id -> Varchar,
@@ -39,6 +47,7 @@ diesel::table! {
 diesel::allow_tables_to_appear_in_same_query!(
     filler,
     ingredient,
+    meal_schedule,
     pantries,
     pantry,
 );
