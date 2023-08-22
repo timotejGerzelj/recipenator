@@ -36,6 +36,7 @@ export async function postIngredient(newIngredient: newIngredient) : Promise<Ing
     }
 
     const createdIngredient = await response.json();
+    console.log("Hello, ", createdIngredient);
     return createdIngredient;
   } catch (error) {
     throw error;

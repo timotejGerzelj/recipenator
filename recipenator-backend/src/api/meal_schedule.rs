@@ -1,14 +1,9 @@
 use actix_web::{
-    get, 
-    post, 
+    get,  
     put,
-    delete,
-    error::ResponseError,
-    web::Path,
-    web::Json,
     web::{Data, self},
     HttpResponse,
-    http::{header::ContentType, StatusCode}, Responder, rt::task
+    http::{header::ContentType, StatusCode}
 };
 use serde::Deserialize;
 
@@ -29,10 +24,9 @@ pub async fn update_meal_schedule_recipe(db: web::Data<Database>, meal_schedule_
     }
 }
 
-#[get("/mealschedule/{id}")]
+#[get("/mealschedule/{meal_schedule_id}")]
 pub async fn get_meal_schedule(db: web::Data<Database>, path_params: web::Path<MealScheduleParams>) -> HttpResponse {
     let id = &path_params.meal_schedule_id;
     let meal_schedule = db.get_meal_schedule(id);
     HttpResponse::Ok().json(meal_schedule)
-
 }

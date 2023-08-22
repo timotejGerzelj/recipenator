@@ -1,12 +1,3 @@
-import { useForm } from "react-hook-form";
-import {
-    Dialog,
-    DialogContent,
-    DialogDescription,
-    DialogHeader,
-    DialogTitle,
-    DialogTrigger,
-  } from "../../@/components/ui/dialog"
 import { useEffect, useState } from "react";
 import { Ingredient, Recipe } from "../types/interfaces";
 import { getRecipes } from "../services/Recipes";
@@ -15,7 +6,6 @@ import { getRecipes } from "../services/Recipes";
 const RecipeFind = ({ingredientsList}) => {
     const [selectedIngredients, setSelectedIngredients] = useState<string[]>([]);
     const [recipes, setRecipes] = useState<Recipe[]>([])
-//    const { recipes, setRecipes } = useState([]);
     const handleIngredientChange = (event) => {
         const { value, checked } = event.target;
         console.log(value, checked);
@@ -46,7 +36,7 @@ const RecipeFind = ({ingredientsList}) => {
     }
 
     return (
-    <>
+    <div className="flex">
     <div>
       <h2>Select Ingredients</h2>
       <ul>
@@ -63,15 +53,15 @@ const RecipeFind = ({ingredientsList}) => {
         </li>
       ))}
       </ul>
-      <h3>Selected Ingredients:</h3>
+      <h2>Selected Ingredients:</h2>
       <ul>
         {selectedIngredients.map((ingredient: string, index: number) => (
           <li key={index}>{ingredient}</li>
         ))}
       </ul>
+      <button className="px-3 py-1 rounded-full text-sm bg-transparent text-gray-500 hover:underline focus:outline-none" onClick={handleGetRecipes}>Search for recipe</button>
     </div>
-    <button className="px-3 py-1 rounded-full text-sm bg-transparent text-gray-500 hover:underline focus:outline-none" onClick={handleGetRecipes}>Search for recipe</button>
-    <div>
+    <div className="ml-auto">
         <h3>Recipes</h3>
         <ul className="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
         {recipes.map((recipe: Recipe, index: number) => (
@@ -98,7 +88,7 @@ const RecipeFind = ({ingredientsList}) => {
         ))}
         </ul>
     </div>
-    </>
+    </div>
     );
 }
 export default RecipeFind;

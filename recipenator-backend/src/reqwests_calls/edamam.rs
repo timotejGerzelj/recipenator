@@ -1,9 +1,8 @@
-use actix_web::web;
 use reqwest;
-use std::{env, collections::HashMap};
-use crate::{models::{models::{Ingredient, Recipe}}};
+use std::env;
+use crate::models::models::Recipe;
 extern crate serde_json;
-use serde_json::{Value, json};
+use serde_json::Value;
 
 async fn get_recipes(data: String) -> Result<serde_json::Value, reqwest::Error> {
     let app_id = env::var("APP_ID").unwrap_or_default();
@@ -14,10 +13,8 @@ async fn get_recipes(data: String) -> Result<serde_json::Value, reqwest::Error> 
     );
     let response = reqwest::get(&url).await?.text().await?;
     let json: serde_json::Value = serde_json::from_str(&response).unwrap();
-
     Ok(json)
 }
-
 fn check_if_ingr_in_arr(ingredients: Vec<String>, ingredient: String) -> bool {
     if ingredients.iter().any(|e| ingredient.contains(e)) {
         true 
@@ -43,7 +40,7 @@ fn destructure_recipe_metadata(recipe: &Value) -> (String, String, String) {
 }
 
 fn recipe_form_ingredient_array(hit: &Value, existing_ingr: &Vec<String>) -> (String,String,String, bool, Vec<String>) {
-    let mut ingredients_vec: Vec<String> = Vec::new(); // Initialize the vector
+    let mut ingredients_vec: Vec<String> = Vec::new();
     let mut strikes = 0;
     if let Some(recipe) = hit.get("recipe") {
         let (label, img_url, url) = destructure_recipe_metadata(recipe);
@@ -53,11 +50,15 @@ fn recipe_form_ingredient_array(hit: &Value, existing_ingr: &Vec<String>) -> (St
                     if let Some(food) = ingredient.get("food") {
                         if let Some(food_str) = food.as_str() {
                             println!("Food: {}", food_str);
-                            if check_if_ingr_in_arr(existing_ingr.to_vec(), food_str.to_owned()) {
+                            let mut food_category = String::new();
+                            if let Some(food_cat) = ingredient.get("foodCategory") {
+                                food_category = food_cat.to_string();
+                            }
+                            if check_if_ingr_in_arr(existing_ingr.to_vec(), food_str.to_owned()) || (food_category == "Condiments and sauces") {
                                 ingredients_vec.push(food_str.to_owned());
                             } else {
                                 strikes += 1;
-                                if (strikes > 5){
+                                if strikes > 3 {
                                     return ( String::new(),String::new(),String::new() ,false, Vec::new());
                                 }
                                 else {
@@ -82,7 +83,7 @@ pub async fn process_edamam_data(ingredients: &String) -> Result<Vec<Recipe>, Bo
     let mut recipes_to_use: Vec<Recipe> = Vec::new();
     for hit in recipe_hits {
         let (label, img_url, url, is_fit, ingredients) = recipe_form_ingredient_array(hit, &ingredients);
-        if (is_fit) {
+        if is_fit {
         let new_recipe = Recipe {
             label: label,
             image: img_url,

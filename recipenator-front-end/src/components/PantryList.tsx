@@ -1,12 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Ingredient, newIngredient } from '../types/interfaces';
 import { useForm } from "react-hook-form";
-import {
-    Dialog,
-    DialogContent,
-    DialogTrigger,
-  } from "../../@/components/ui/dialog"
-import { deleteIngredient, postIngredient, updateIngredient } from '../services/Ingredients';
+
+import { postIngredient, updateIngredient } from '../services/Ingredients';
   
 
 
@@ -25,6 +21,7 @@ const PantryList = ({ingredientList, updatePantryListIngredients}) => {
     useEffect(() => {
         setIngredients(ingredientList);
       }, [ingredientList]);
+
     async function ingredientAdd(ingrName: string, ingrAmount: number, ingrMeasure: string){
         const newIngredient: newIngredient = {ingredient_name: ingrName, quantity: ingrAmount, unit: ingrMeasure}
         const ingredient = await postIngredient(newIngredient);
@@ -47,7 +44,6 @@ const PantryList = ({ingredientList, updatePantryListIngredients}) => {
     }
 
     return (
-
                 <form 
                     onSubmit={handleSubmit(data => {
                     const ingredientAlreadyExistsIndex = ingredients.findIndex(

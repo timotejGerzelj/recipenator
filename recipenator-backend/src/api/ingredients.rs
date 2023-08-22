@@ -1,22 +1,16 @@
-//Here we will have all the routes needed for the 
-//ingredients but for now I will just fill them up with filler ingredients
 use actix_web::{
     get, 
     post, 
     put,
     delete,
-    error::ResponseError,
-    web::Path,
     web::Json,
     web::{Data, self},
-    HttpResponse,
-    http::{header::ContentType, StatusCode}, Responder, rt::task
+    HttpResponse
 };
 
-use serde::{Serialize, Deserialize};
-use derive_more::{Display};
+use serde::Deserialize;
 
-use crate::{models::models::{Ingredient}, db::Database};
+use crate::{models::models::Ingredient, db::Database};
 use crate::reqwests_calls::edamam::process_edamam_data;
 #[derive(Deserialize)]
 struct PathParams {

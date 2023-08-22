@@ -3,13 +3,12 @@ mod models;
 mod db;
 mod api;
 mod reqwests_calls;
-use std::io::{stdin, Read};
+
 
 //use crate::models::Recipe;
 //use crate::ops::recipe_ops::{delete_recipe, update_recipe, create_recipe};
-use actix_web::{get, http, web::{self, post}, App, HttpRequest, HttpResponse, HttpServer, Responder, post, dev::Response};
+use actix_web::{get, web::{self, post}, App, HttpResponse, HttpServer};
 use actix_cors::Cors;
-use reqwests_calls::edamam::process_edamam_data;
 use serde::Serialize;
 
  
