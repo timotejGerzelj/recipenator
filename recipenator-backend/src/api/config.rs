@@ -2,7 +2,7 @@ use actix_web::web;
 
 use crate::api::ingredients::{create_ingredient, get_ingredients};
 
-use super::ingredients::{delete_ingredient, update_ingredient, update_ingredients, find_match_recipes};
+use super::{ingredients::{delete_ingredient, update_ingredient, update_ingredients, find_match_recipes}, recipe::{create_recipes, delete_recipe, get_recipes}};
 
 
 pub fn config(cfg: &mut web::ServiceConfig) {
@@ -14,5 +14,8 @@ pub fn config(cfg: &mut web::ServiceConfig) {
             .service(update_ingredient)
             .service(update_ingredients)
             .service(find_match_recipes)
-);
+            .service(create_recipes)
+            .service(delete_recipe)
+            .service(get_recipes)            
+    );
 }

@@ -14,6 +14,14 @@ CREATE TABLE meal_schedule (
     recipes TEXT NOT NULL
 );
 
+CREATE TABLE recipe (
+    recipe_id VARCHAR(255) PRIMARY KEY,
+    recipe_image VARCHAR(255) NOT NULL,
+    recipe_ingredients VARCHAR(255) NOT NULL,
+    label VARCHAR(40) NOT NULL,
+    recipe_url VARCHAR(255) NOT NULL
+);
+
 INSERT INTO pantry (pantry_id) VALUES ('e4deaf62-05b0-4ea6-913f-3d8e00938e68');
 INSERT INTO ingredient (ingredient_id, ingredient_name, quantity, unit) VALUES
     ('2c6a4d38-56f4-441f-baed-8990ce45a6e9', 'flour', 500, 'grams'),

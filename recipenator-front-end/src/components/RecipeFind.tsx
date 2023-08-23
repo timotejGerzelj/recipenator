@@ -7,7 +7,7 @@ import { useIngredientsStore } from "../App";
 const RecipeFind = () => {
     const [selectedIngredients, setSelectedIngredients] = useState<string[]>([]);
     const {ingredients} = useIngredientsStore();
-
+    const [selectedRecipes, setSelectedRecipes] = useState<number[]>([]);
     const [recipes, setRecipes] = useState<Recipe[]>([])
     const handleIngredientChange = (event: any) => {
         const { value, checked } = event.target;
@@ -34,6 +34,16 @@ const RecipeFind = () => {
               });
             setRecipes(recipes);
         })
+    }
+    const handleRecipeSelect = (index: number) => {
+      if (selectedRecipes.includes(index)) {
+        setSelectedRecipes(selectedRecipes.filter((i) => i !== index));
+      } else {
+        setSelectedRecipes([...selectedRecipes, index]);
+      }
+    };
+    const handleRecipesSubmit = (recipes: Recipe[]) => {
+
     }
 
     return (
@@ -68,8 +78,9 @@ const RecipeFind = () => {
         {recipes.map((recipe: Recipe, index: number) => (
                 <li
                 key={index}
-                className="border rounded-lg p-4 shadow-md hover:shadow-lg transition duration-300 ease-in-out"
-              >
+                className={`border rounded-lg p-4 shadow-md ${
+                  selectedRecipes.includes(index) ? "bg-blue-100" : "bg-white"
+                } hover:shadow-lg transition duration-300 ease-in-out`}>
                 <img
                   src={recipe.image}
                   alt={`Recipe ${index}`}
@@ -77,12 +88,21 @@ const RecipeFind = () => {
                 />
                 <h2 className="text-lg font-semibold mb-2">{recipe.label}</h2>
                 <p className="text-gray-600 mb-4">{recipe.ingredients.join(', ')}</p>
+                <button
+                className={`px-2 py-1 text-sm border ${
+                  selectedRecipes.includes(index)
+                    ? "bg-blue-500 text-white"
+                    : "border-gray-300 text-gray-500"
+                } rounded focus:outline-none focus:ring focus:border-blue-300 transition`}
+                onClick={() => handleRecipeSelect(index)}
+              >
+                {selectedRecipes.includes(index) ? "Selected" : "Select"}
+              </button>
                 <a
                   href={recipe.recipe_url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-blue-500 hover:underline"
-                >
+                  className="text-blue-500 hover:underline">
                   View Recipe
                 </a>
               </li>

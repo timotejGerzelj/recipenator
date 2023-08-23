@@ -1,7 +1,6 @@
-use crate::schema::{pantry, ingredient, meal_schedule};
+use crate::schema::{pantry, ingredient, meal_schedule, recipe};
 use diesel::prelude::*;
 use serde::{Serialize, Deserialize};
-
 
 #[derive(Queryable, Selectable, Serialize, Deserialize, Debug, Insertable, AsChangeset)]
 #[diesel(table_name = pantry)]
@@ -10,7 +9,6 @@ pub struct Pantry {
     #[serde(default)]
     pub pantry_id: String,
 } 
-
 
 #[derive(Queryable, Selectable, Serialize, Deserialize, Debug, Insertable, AsChangeset)]
 #[diesel(table_name = ingredient)]
@@ -36,4 +34,15 @@ pub struct Recipe {
 pub struct MealSchedule {
     pub meal_schedule_id: String,
     pub recipes: String,
+}
+
+#[derive(Queryable, Selectable, Serialize, Deserialize, Debug, Insertable)]
+#[diesel(table_name = recipe)]
+#[diesel(check_for_backend(diesel::pg::Pg))]
+pub struct SelectedRecipes {
+    pub recipe_id: String,
+    pub recipe_image: String,
+    pub recipe_ingredients: String,
+    pub label: String,
+    pub recipe_url: String
 }

@@ -34,4 +34,5 @@ pub mod database {
 
 pub mod ingredient;
 pub mod meal_scheduler;
+pub mod recipes;
 pub use database::Database;

@@ -7,16 +7,16 @@ impl Database {
     pub fn create_ingredient(&self, new_ingredient: Ingredient) -> Result<Ingredient, Error> {
         use crate::schema::ingredient::dsl::*;
 
-        let new_ingredient = Ingredient {
+        let new_ingredient_with_id = Ingredient {
             ingredient_id: uuid::Uuid::new_v4().to_string(),
             ..new_ingredient
         };
         diesel::insert_into(ingredient)
-            .values(&new_ingredient)
+            .values(&new_ingredient_with_id)
             .execute(&mut self.pool.get().unwrap())
             .expect("Error creating new todo");
 
-        Ok(new_ingredient)
+        Ok(new_ingredient_with_id)
     }
     pub fn get_ingredients(&self) -> Vec<Ingredient> {
         use crate::schema::ingredient::dsl::*;

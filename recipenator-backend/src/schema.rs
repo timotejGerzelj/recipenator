@@ -44,10 +44,26 @@ diesel::table! {
     }
 }
 
+diesel::table! {
+    recipe (recipe_id) {
+        #[max_length = 255]
+        recipe_id -> Varchar,
+        #[max_length = 255]
+        recipe_image -> Varchar,
+        #[max_length = 255]
+        recipe_ingredients -> Varchar,
+        #[max_length = 40]
+        label -> Varchar,
+        #[max_length = 255]
+        recipe_url -> Varchar,
+    }
+}
+
 diesel::allow_tables_to_appear_in_same_query!(
     filler,
     ingredient,
     meal_schedule,
     pantries,
     pantry,
+    recipe,
 );

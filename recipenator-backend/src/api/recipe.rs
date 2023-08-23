@@ -1,7 +1,6 @@
-/*use actix_web::{
+use actix_web::{
     get, 
     post, 
-    put,
     delete,
     error::ResponseError,
     web::Path,
@@ -13,68 +12,34 @@
 use serde::{Serialize, Deserialize};
 use derive_more::{Display};
 
-use crate::{db::connection::Database, models::recipe::{Recipe, self}};
+use crate::{db::Database, models::models::SelectedRecipes};
+
+#[derive(Deserialize)]
+struct PathParams {
+    recipe_id: String,
+}
 
 
 #[post("/recipes/create")]
-pub async fn create_recipe(db: web::Data<Database>, new_recipe: web::Json<Recipe>) -> HttpResponse {
-    let recipe = db.create_recipe(new_recipe.into_inner());
+pub async fn create_recipes(db: web::Data<Database>, new_recipes: web::Json<Vec<SelectedRecipes>>) -> HttpResponse {
+    let recipe = db.create_recipes(new_recipes.into_inner());
     match recipe {
-        Ok(todo) => HttpResponse::Ok().json(todo),
-        Err(err) => HttpResponse::InternalServerError().body(err.to_string()),
-    }}
-   /*  db: web::Data<Database>, new_todo: web::Json<NewRecipe<'_>>) -> HttpResponse {
-    let recipe = db.create_recipe();
-    match recipe = {
-        Ok(recipe) => HttpResponse::Ok().json(recipe),
+        Ok(r) => HttpResponse::Ok().json(r),
         Err(err) => HttpResponse::InternalServerError().body(err.to_string()),
     }
-    
 }
-*/
 
-#[put("/recipes/{recipe_global_id}/recipe")]
-pub async fn update_recipe(db: web::Data<Database>, id: web::Path<String>, updated_recipe: web::Json<Recipe>)  -> HttpResponse {
-    
-    let recipe = db.update_recipe(&id, updated_recipe.into_inner());
+#[delete("/recipes/{recipe_id}")]
+pub async fn delete_recipe(db: web::Data<Database>, id: web::Path<PathParams>) -> HttpResponse {
+    let recipe = db.delete_recipe(&id.recipe_id);
     match recipe {
-        Some(todo) => HttpResponse::Ok().json(todo),
-        None => HttpResponse::NotFound().body("Todo not found"),
+        Ok(_) => HttpResponse::Ok().finish(),
+        Err(e) => HttpResponse::NotFound().body("pantry ingredient not found"),
     }
 }
-
-#[delete("/recipes/{recipe_global_id}/recipe")]
-pub async fn delete_recipe(db: web::Data<Database>, id: web::Path<String>) -> HttpResponse {
-    let recipe = db.delete_recipe(&id);
-    match recipe {
-        Some(_) => HttpResponse::Ok().finish(),
-        None => HttpResponse::NotFound().body("Todo not found"),
-    }
-}
-
-#[get("/recipes/{recipe_global_id}")]
-pub async fn get_recipe(db: web::Data<Database>, id: web::Path<String>) -> impl Responder {
-    let recipe = db.get_recipe_by_id(&id);
-
-    match recipe {
-        Some(recipe) => HttpResponse::Ok().json(recipe),
-        None => HttpResponse::NotFound().body("Recipe not found"),
-    }}
 
 #[get("/recipes")]
 pub async fn get_recipes(db: web::Data<Database>) -> HttpResponse {
     let recipes = db.get_recipes();
     HttpResponse::Ok().json(recipes)
 }
-
-pub fn config(cfg: &mut web::ServiceConfig) {
-        cfg.service(
-            web::scope("/api")
-                .service(create_recipe)
-                .service(get_recipe)
-                .service(update_recipe)
-                .service(delete_recipe)
-                .service(get_recipes)
-);
-}
-*/
