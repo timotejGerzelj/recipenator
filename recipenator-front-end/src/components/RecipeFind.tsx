@@ -1,14 +1,16 @@
 import { useEffect, useState } from "react";
 import { Ingredient, Recipe } from "../types/interfaces";
 import { getRecipes } from "../services/Recipes";
+import { useIngredientsStore } from "../App";
   
 
-const RecipeFind = ({ingredientsList}) => {
+const RecipeFind = () => {
     const [selectedIngredients, setSelectedIngredients] = useState<string[]>([]);
+    const {ingredients, setIngredients} = useIngredientsStore()
+
     const [recipes, setRecipes] = useState<Recipe[]>([])
     const handleIngredientChange = (event) => {
         const { value, checked } = event.target;
-        console.log(value, checked);
         if (checked) {
           setSelectedIngredients((prevSelected: string[]) => [...prevSelected, value]);
           console.log(selectedIngredients)
@@ -17,7 +19,6 @@ const RecipeFind = ({ingredientsList}) => {
             prevSelected.filter((ingredient) => ingredient !== value)
           );
         }
-
       };
     const handleGetRecipes = () => {
         let formatRequestParam = selectedIngredients.join(',')
@@ -40,7 +41,7 @@ const RecipeFind = ({ingredientsList}) => {
     <div>
       <h2>Select Ingredients</h2>
       <ul>
-      {ingredientsList.map((ing: Ingredient, index: number) => (
+      {ingredients.map((ing: Ingredient, index: number) => (
         <li key={ing.ingredient_id}>
             <label>
               <input

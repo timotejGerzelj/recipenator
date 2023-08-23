@@ -3,31 +3,26 @@ import { Ingredient, newIngredient } from '../types/interfaces';
 import { useForm } from "react-hook-form";
 
 import { postIngredient, updateIngredient } from '../services/Ingredients';
-  
+import { useIngredientsStore } from '../App';
 
 
-interface PantryListProps {
-    ingredientList: Ingredient[];
-    updatePantryListIngredients: (updatedIngredients: Ingredient[]) => void;
-}
-  
 
-const PantryList = ({ingredientList, updatePantryListIngredients}) => {
+
+const PantryList = () => {
     const { register, handleSubmit } = useForm();
-    const [ ingredients, setIngredients ] = useState<Ingredient[]>([]);
-
+    const {ingredients, setIngredients} = useIngredientsStore()
 
 
     useEffect(() => {
-        setIngredients(ingredientList);
-      }, [ingredientList]);
+        setIngredients(ingredients);
+      }, [ingredients]);
 
     async function ingredientAdd(ingrName: string, ingrAmount: number, ingrMeasure: string){
         const newIngredient: newIngredient = {ingredient_name: ingrName, quantity: ingrAmount, unit: ingrMeasure}
         const ingredient = await postIngredient(newIngredient);
-        setIngredients(oldArray => [...oldArray, ingredient]);
+        const updatedIngredients = [...ingredients, ingredient];
+        setIngredients(updatedIngredients);
         console.log("ingredients: ", ingredients)
-        updatePantryListIngredients([...ingredients, newIngredient]);
     }
     function ingredientUpdate(ingrAmount: number, index: number) {
         const updatedIngredients = [...ingredients];
@@ -40,7 +35,6 @@ const PantryList = ({ingredientList, updatePantryListIngredients}) => {
           }
         updateIngredient(updateIngr);
         setIngredients(updatedIngredients);
-        updatePantryListIngredients(ingredients);
     }
 
     return (
