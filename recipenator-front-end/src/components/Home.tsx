@@ -73,23 +73,23 @@ function Home() {
           console.error("Error updating ingredient:", error);
     }}
     return (
-      <div className="container mx-auto">
-            <div className="flex flex-row flex-wrap py-4">
+      <div className="container h-screen mx-auto bg-white rounded shadow-lg p-4 font-sans">
+            <div className="flex flex-row justify-between items-center mb-4">
         <div className="w-full sm:w-1/3 md:w-1/4 px-2" >
-            <div className="sticky top-0 p-4 w-full">
-            <ul className="flex flex-col overflow-hidden">
+            <div className="sticky absolute inset-0 w-full h-full h-screen">
+            <ul className="flex flex-col overflow-hidden font-poppins">
                 {ingredients.map((ing, index) => (
-            <li className="flex flex-col overflow-hidden border p-4" key={index}>
+            <li className="flex flex-col p-4 border-4 border-slate-950 rounded-lg mb-4 hover:bg-slate-50 transition" key={index}>
               {editingIngredientId === ing.ingredient_id ? (
                 <>
                   <label className="block mb-2 font-medium text-gray-800" htmlFor="updateIngredientName">The name of the ingredient:</label>
-                  <input className="w-full px-3 py-2 border rounded focus:outline-none focus:ring focus:border-blue-500"
+                  <input className="w-full px-3 py-2 border rounded focus:outline-none focus:ring focus:border-blue-500 transition"
                    type="text" defaultValue={ing.ingredient_name}  {...register("updateIngredientName")} />
                   <label className="block mb-2 font-medium text-gray-800" htmlFor="updateIngredientAmount">Ingredient amount:</label>
-                  <input className="w-full px-3 py-2 border rounded focus:outline-none focus:ring focus:border-blue-500"
+                  <input className="w-full px-3 py-2 border rounded focus:outline-none focus:ring focus:border-blue-500 transition"
                    type="number" defaultValue={ing.quantity} {...register("updateIngredientAmount")} />
                   <label className="block mb-2 font-medium text-gray-800" htmlFor="updateIngredientUnit">Type of measure:</label>
-                  <input className="w-full px-3 py-2 border rounded focus:outline-none focus:ring focus:border-blue-500"
+                  <input className="w-full px-3 py-2 border rounded focus:outline-none focus:ring focus:border-blue-500 transition"
                    type="text" defaultValue={ing.unit}
                    {...register("updateIngredientUnit")} />
                 <button className='px-3 py-1 rounded-full text-sm bg-transparent text-gray-500 hover:underline focus:outline-none' onClick={() => handleUpdate(ing)}>Save</button>
@@ -107,7 +107,7 @@ function Home() {
               ) }
             </li>
           ))}
-                  <button className="mt-auto px-2 py-1 text-sm bg-transparent border border-black-500 text-black-500 hover:bg-gray-100 hover:border-gray-600 focus:outline-none focus:ring focus:border-gray-300"
+                  <button className="fixed w-auto bottom-0 left-0 mb-4 ml-4 px-3 py-2 text-sm bg-blue-500 hover:bg-blue-600 text-white rounded focus:outline-none focus:ring focus:border-blue-300 transition"
            onClick={() => setNewView('addIngredient')}>Add Ingredient</button>
         </ul>
         </div>

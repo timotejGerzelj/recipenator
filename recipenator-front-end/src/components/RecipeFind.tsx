@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import {  useState } from "react";
 import { Ingredient, Recipe } from "../types/interfaces";
 import { getRecipes } from "../services/Recipes";
 import { useIngredientsStore } from "../App";
@@ -6,10 +6,10 @@ import { useIngredientsStore } from "../App";
 
 const RecipeFind = () => {
     const [selectedIngredients, setSelectedIngredients] = useState<string[]>([]);
-    const {ingredients, setIngredients} = useIngredientsStore()
+    const {ingredients} = useIngredientsStore();
 
     const [recipes, setRecipes] = useState<Recipe[]>([])
-    const handleIngredientChange = (event) => {
+    const handleIngredientChange = (event: any) => {
         const { value, checked } = event.target;
         if (checked) {
           setSelectedIngredients((prevSelected: string[]) => [...prevSelected, value]);
@@ -38,11 +38,11 @@ const RecipeFind = () => {
 
     return (
     <div className="flex">
-    <div>
+    <div className="sticky absolute inset-0 w-full h-full h-screen">
       <h2>Select Ingredients</h2>
-      <ul>
+      <ul className="flex flex-col overflow-hidden font-poppins">
       {ingredients.map((ing: Ingredient, index: number) => (
-        <li key={ing.ingredient_id}>
+        <li className="flex flex-col p-4 border-4 border-slate-950 rounded-lg mb-4 hover:bg-slate-50 transition" key={ing.ingredient_id}>
             <label>
               <input
                 type="checkbox"
@@ -55,12 +55,12 @@ const RecipeFind = () => {
       ))}
       </ul>
       <h2>Selected Ingredients:</h2>
-      <ul>
+      <ul className="flex flex-col overflow-hidden font-poppins">
         {selectedIngredients.map((ingredient: string, index: number) => (
           <li key={index}>{ingredient}</li>
         ))}
       </ul>
-      <button className="px-3 py-1 rounded-full text-sm bg-transparent text-gray-500 hover:underline focus:outline-none" onClick={handleGetRecipes}>Search for recipe</button>
+      <button className="fixed w-auto bottom-0 left-0 mb-4 ml-4 px-3 py-2 text-sm bg-blue-500 hover:bg-blue-600 text-white rounded focus:outline-none focus:ring focus:border-blue-300 transition" onClick={handleGetRecipes}>Search for recipe</button>
     </div>
     <div className="ml-auto">
         <h3>Recipes</h3>

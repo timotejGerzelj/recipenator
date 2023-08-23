@@ -50,8 +50,7 @@ return (
       <Route path="/findrecipe" element={<RecipeFind />} />
     </Routes>
   </BrowserRouter>
-//      <Route path="/findrecipe" element={<RecipeFind ingredientsList={ingredients} />} />
-//      zustand
+
 )
 }
 

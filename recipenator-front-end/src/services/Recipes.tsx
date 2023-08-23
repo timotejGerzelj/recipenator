@@ -18,3 +18,7 @@ export async function getRecipes(data_to_send: string) : Promise<Recipe[]> {
         throw error;
     }
 }
+
+export async function newSelectedRecipe() {}
+
+export async function deleteRecipe() {}
