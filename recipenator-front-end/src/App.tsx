@@ -5,14 +5,20 @@ import Home from './components/Home';
 import MealSchedule1 from './components/MealScheduling/MealSchedule1';
 import MealScheduleStep2 from './components/MealScheduling/MealScheduleStep2';
 import create from 'zustand';
-import { Ingredient } from "./types/interfaces";
+import { Ingredient, SelectedRecipe } from "./types/interfaces";
 import RecipeFind from "./components/RecipeFind";
 import { getIngredients } from "./services/Ingredients";
 import { useEffect } from "react";
+import { getRecipes, getSelectedRecipes } from "./services/Recipes";
 
 interface IngredientsState {
   ingredients: Ingredient[],
   setIngredients: (newIngredients: Ingredient[]) => void,
+}
+
+interface RecipeState {
+  selectedRecipes: SelectedRecipe[],
+  setSelectedRecipes: (newRecipes: SelectedRecipe[]) => void,
 }
 
 export const useIngredientsStore = create<IngredientsState>()((set) => ({
@@ -20,11 +26,17 @@ export const useIngredientsStore = create<IngredientsState>()((set) => ({
   setIngredients: (newIngredients: Ingredient[]) => set({ ingredients: newIngredients }),
 }));
 
+export const useRecipesStore = create<RecipeState>()((set) => ({
+  selectedRecipes: [],
+  setSelectedRecipes: (newRecipes: SelectedRecipe[]) => set({selectedRecipes: newRecipes}),
+}));
 
 function App() {
 //const updateIngredients = useIngredientsStore((state) => state.setIngredients);
 
 const { ingredients ,setIngredients }= useIngredientsStore();
+const { selectedRecipes , setSelectedRecipes }= useRecipesStore();
+
 useEffect(() => {
   async function fetchIngredients() {
     try {
@@ -34,8 +46,17 @@ useEffect(() => {
       console.error('Error fetching ingredients:', error);
     }
   }
+  async function fetchRecipes() {
+    try {
+      const fetchedRecipes = await getSelectedRecipes();
+      setSelectedRecipes(fetchedRecipes); // Update the global state with fetched ingredients
+    } catch (error) {
+      console.error('Error fetching ingredients:', error);
+    }
+  }
 
   fetchIngredients();
+  fetchRecipes();
 }, [setIngredients]); // Make sure to include setIngredients in the dependency array
 
 console.log('what is here? ', ingredients);

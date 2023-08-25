@@ -48,11 +48,10 @@ diesel::table! {
     recipe (recipe_id) {
         #[max_length = 255]
         recipe_id -> Varchar,
-        #[max_length = 255]
-        recipe_image -> Varchar,
+        recipe_image -> Text,
         #[max_length = 255]
         recipe_ingredients -> Varchar,
-        #[max_length = 40]
+        #[max_length = 100]
         label -> Varchar,
         #[max_length = 255]
         recipe_url -> Varchar,

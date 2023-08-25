@@ -26,7 +26,7 @@ pub async fn create_pantry_ingredient(db: web::Data<Database>, new_pantry_ingred
     match pantry_ingr {
         Ok(todo) => HttpResponse::Ok().json(todo),
         Err(err) => HttpResponse::InternalServerError().body(err.to_string()),
-    }}
+}}
 
 #[get("/pantry/ingredients")]
 pub async fn get_pantry_ingredients(db: web::Data<Database>) -> HttpResponse {

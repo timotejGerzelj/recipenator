@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { Ingredient } from "../types/interfaces";
+import { Ingredient, SelectedRecipe } from "../types/interfaces";
 import PantryList from "./PantryList";
 import RecipeFind from "./RecipeFind";
 import { deleteIngredient, getIngredients, updateIngredient } from "../services/Ingredients";
 import { useNavigate } from "react-router-dom";
-import { useIngredientsStore } from "../App";
+import { useIngredientsStore, useRecipesStore } from "../App";
 
 function Home() {
     const { register, reset, getValues } = useForm();
@@ -13,6 +13,7 @@ function Home() {
     const [currentView, setCurrentView] = useState('');
     const navigate = useNavigate();
     const {ingredients ,setIngredients} = useIngredientsStore();
+    const {selectedRecipes, setSelectedRecipes} = useRecipesStore();
     const setNewView = (view: string) => {
       setCurrentView(view);
     };
@@ -73,53 +74,72 @@ function Home() {
           console.error("Error updating ingredient:", error);
     }}
     return (
-      <div className="container h-screen mx-auto bg-white rounded shadow-lg p-4 font-sans">
-            <div className="flex flex-row justify-between items-center mb-4">
-        <div className="w-full sm:w-1/3 md:w-1/4 px-2" >
-            <div className="sticky absolute inset-0 w-full h-full h-screen">
-            <ul className="flex flex-col overflow-hidden font-poppins">
-                {ingredients.map((ing, index) => (
-            <li className="flex flex-col p-4 border-4 border-slate-950 rounded-lg mb-4 hover:bg-slate-50 transition" key={index}>
-              {editingIngredientId === ing.ingredient_id ? (
-                <>
-                  <label className="block mb-2 font-medium text-gray-800" htmlFor="updateIngredientName">The name of the ingredient:</label>
-                  <input className="w-full px-3 py-2 border rounded focus:outline-none focus:ring focus:border-blue-500 transition"
-                   type="text" defaultValue={ing.ingredient_name}  {...register("updateIngredientName")} />
-                  <label className="block mb-2 font-medium text-gray-800" htmlFor="updateIngredientAmount">Ingredient amount:</label>
-                  <input className="w-full px-3 py-2 border rounded focus:outline-none focus:ring focus:border-blue-500 transition"
-                   type="number" defaultValue={ing.quantity} {...register("updateIngredientAmount")} />
-                  <label className="block mb-2 font-medium text-gray-800" htmlFor="updateIngredientUnit">Type of measure:</label>
-                  <input className="w-full px-3 py-2 border rounded focus:outline-none focus:ring focus:border-blue-500 transition"
-                   type="text" defaultValue={ing.unit}
-                   {...register("updateIngredientUnit")} />
-                <button className='px-3 py-1 rounded-full text-sm bg-transparent text-gray-500 hover:underline focus:outline-none' onClick={() => handleUpdate(ing)}>Save</button>
-                <button className='px-3 py-1 rounded-full text-sm bg-transparent text-gray-500 hover:underline focus:outline-none' onClick={() => {
-                toggleEditMode("");
-              }}>Cancel</button>
-            </>
-              ) : (
-                <>
-                  {ing.ingredient_name} - {ing.quantity} {ing.unit} <button className='px-3 py-1 rounded-full text-sm bg-transparent text-gray-500 hover:underline focus:outline-none' onClick={() => handleDelete(ing.ingredient_id)}>Delete</button>
-                  <button className='px-3 py-1 rounded-full text-sm bg-transparent text-gray-500 hover:underline focus:outline-none' onClick={() => {
-                    reset();
-                    toggleEditMode(ing.ingredient_id)}}>Update</button>
-                </>
-              ) }
-            </li>
-          ))}
-                  <button className="fixed w-auto bottom-0 left-0 mb-4 ml-4 px-3 py-2 text-sm bg-blue-500 hover:bg-blue-600 text-white rounded focus:outline-none focus:ring focus:border-blue-300 transition"
-           onClick={() => setNewView('addIngredient')}>Add Ingredient</button>
+      <div className="container h-screen mx-auto bg-gray-100 p-4 font-sans bg-gray-100">
+      <div className="flex flex-row">
+        <div className="w-full sm:w-1/3 md:w-1/4 px-4 h-screen overflow-y-auto bg-white shadow">
+          <div className="sticky top-0 p-4">
+            <h3 className="text-xl font-semibold mb-4">Ingredients</h3>
+            <ul className="flex flex-col space-y-2">
+              {ingredients.map((ing, index) => (
+                <li
+                  key={index}
+                  className="p-2 border border-gray-300 rounded hover:bg-gray-100 transition"
+                >
+                  {ing.ingredient_name}
+                </li>
+              ))}
+            </ul>
+            <button
+              className="rounded-lg px-4 py-2 bg-blue-500 text-blue-100 hover:bg-blue-600 duration-300"
+              onClick={() => setNewView('addIngredient')}
+            >
+              Add Ingredient
+            </button>
+          </div>
+        </div>
+
+        <div className="w-full sm:w-2/3 md:w-3/4 pt-1 px-4">
+        <div className="ml-auto">
+        <h3>Recipes</h3>
+        <div className="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+  {selectedRecipes.map((recipe: SelectedRecipe, index: number) => (
+    <div
+      key={index}
+      className="relative rounded-lg  group rounded-md border-4 border-gray-950 border p-4 overflow-hidden font-poppins h-full flex flex-col justify-between"
+    >
+      <div className="relative z-10">
+        <h3 className="text-xl font-semibold mb-2">{recipe.label}</h3>
+        <ul>
+          {recipe.recipe_ingredients.split(',').map((ingredient) => (
+            <li>{ingredient}</li>
+          ) )}
         </ul>
-        </div>
-       </div>
-        <div className="w-full sm:w-2/3 md:w-3/4 pt-1 px-2">{renderView()}
-        <button className='px-2 py-1 rounded-full text-sm bg-transparent border border-black-500 text-black-500 hover:bg-gray-100 hover:border-gray-600 focus:outline-none focus:ring focus:border-gray-300'
-           onClick={() => navigate('/findrecipe')}>Find Recipe</button>
-        <button className='px-2 py-1 rounded-full text-sm bg-transparent border border-black-500 text-black-500 hover:bg-gray-100 hover:border-gray-600 focus:outline-none focus:ring focus:border-gray-300'
-            onClick={() => navigate('/schedulemeals/1')}>Schedule Meal</button>
-        </div>
-        </div>
-      </div>    
+        <a
+          href={recipe.recipe_url}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-blue-300 hover:underline"
+        >
+          View Recipe
+        </a>
+      </div>
+      <img
+        src={recipe.recipe_image}
+        alt={`Recipe ${index}`}
+        className="w-full h-auto object-cover opacity-75 group-hover:opacity-100 transition-opacity"
+      />
+    </div>
+  ))}
+</div>
+    </div>
+    <button
+            className="fixed bottom-4 right-4  rounded-lg px-4 py-2 bg-blue-500 text-blue-100 hover:bg-blue-600 duration-300"
+            onClick={() => navigate('/findrecipe')}>
+            Find Recipe
+          </button>        
+      </div>
+    </div>
+  </div>    
         
     );
   }

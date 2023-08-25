@@ -27,3 +27,11 @@ export interface Recipe {
   label: string,
   recipe_url: string
 }
+
+export interface SelectedRecipe {
+  recipe_id: string,
+  recipe_image: string,
+  recipe_ingredients: string,
+  label: string,
+  recipe_url: string
+}

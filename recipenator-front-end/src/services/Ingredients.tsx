@@ -23,7 +23,7 @@ export async function getIngredients(): Promise<Ingredient[]> {
 
 export async function postIngredient(newIngredient: newIngredient) : Promise<Ingredient> {
   try {
-    const response = await fetch(`${API_BASE_URL}/ingredient`, {
+    const response = await fetch(`http://localhost:8080/api/recipes/create`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

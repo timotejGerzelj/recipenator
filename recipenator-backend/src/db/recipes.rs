@@ -42,6 +42,9 @@ impl Database {
         
     }
     pub fn create_recipes(&self, created_recipes: Vec<SelectedRecipes>) -> Result<Vec<SelectedRecipes>, Error> {
+        for my_struct in &created_recipes { 
+            println!("{}" ,my_struct.label);
+        }
         use crate::schema::recipe::dsl::*;
         let mut recipes_vec: Vec<SelectedRecipes> = Vec::new();
         for new_recipe in created_recipes {

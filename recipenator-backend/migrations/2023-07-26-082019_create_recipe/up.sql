@@ -16,9 +16,9 @@ CREATE TABLE meal_schedule (
 
 CREATE TABLE recipe (
     recipe_id VARCHAR(255) PRIMARY KEY,
-    recipe_image VARCHAR(255) NOT NULL,
+    recipe_image TEXT NOT NULL,
     recipe_ingredients VARCHAR(255) NOT NULL,
-    label VARCHAR(40) NOT NULL,
+    label VARCHAR(100) NOT NULL,
     recipe_url VARCHAR(255) NOT NULL
 );
 
