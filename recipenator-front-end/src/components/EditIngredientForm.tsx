@@ -18,6 +18,7 @@ const EditIngredientForm = ({ ingredient, onClose, open }) => {
   const {ingredients ,setIngredients} = useIngredientsStore();
 
   useEffect(() => {
+    console.log("this ingredients,   ", ingredient)
     setValue('ingredientName', ingredient.ingredient_name);
     setValue('ingredientAmount', ingredient.quantity);
     setValue('ingredientMeasure', ingredient.unit);

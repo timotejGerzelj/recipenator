@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { SelectedRecipe } from "../types/interfaces";
+import { Ingredient, SelectedRecipe } from "../types/interfaces";
 import { deleteIngredient, getIngredients, updateIngredient } from "../services/Ingredients";
 import { useNavigate } from "react-router-dom";
 import { useIngredientsStore, useRecipesStore } from "../App";
@@ -8,7 +8,7 @@ import { useIngredientsStore, useRecipesStore } from "../App";
 import AddIngredientForm from "./AddIngredientForm";
 import EditIngredientForm from "./EditIngredientForm";
 
-
+import { FaEdit, FaTrash } from 'react-icons/fa'
 
 
 function Home() {
@@ -18,10 +18,15 @@ function Home() {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isEditIngredientOpen, setIsEditIngredientOpen] = useState(false);
     const [isAddIngredientOpen, setIsAddIngredientOpen] = useState(false);
+    const [ingredientIsEditing, setEditingIngredient] = useState<Ingredient>({
+      ingredient_id: '', // Add other fields here
+      ingredient_name: '',
+      quantity: 0,
+      unit: '',});
 
-
-    const handleEditIngredientOpen = () => {
-      setIsEditIngredientOpen(true);
+    const handleEditIngredientOpen = (ingredient) => {
+      setEditingIngredient(ingredient); // Set the ingredient to edit
+      setIsEditIngredientOpen(true); // Open the edit dialog
     };
     const handleEditIngredientClose = () => {
       setIsEditIngredientOpen(false);
@@ -72,13 +77,22 @@ function Home() {
                   key={index}
                   className="p-2 border border-gray-300 rounded hover:bg-gray-100 transition"
                 >
+                <span className="flex items-center">
+
                   {ing.ingredient_name}
-                  <button onClick={handleEditIngredientOpen}>Edit</button>
-                  <EditIngredientForm ingredient={ingredients[index]}        
-                  onClose={handleEditIngredientClose} // Pass the onClose function
-                  open={isEditIngredientOpen} // Pass the open state
- />             
-                <button onClick={() => handleDelete(ing.ingredient_id)}>Delete</button>
+                  <FaEdit
+                        className="ml-2 cursor-pointer text-black hover:text-blue-600"
+                        onClick={() => handleEditIngredientOpen(ing)} // Pass the ingredient to edit
+                  />
+
+                  <FaTrash
+                      className="ml-2 cursor-pointer text-black hover:text-red-600"
+                      onClick={() => handleDelete(ing.ingredient_id)}
+                    />
+  
+              </span>
+              <EditIngredientForm ingredient={ingredientIsEditing}        
+                  onClose={handleEditIngredientClose} open={isEditIngredientOpen}/>
 
                 </li>
               ))}
