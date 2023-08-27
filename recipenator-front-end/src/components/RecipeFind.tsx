@@ -2,6 +2,7 @@ import {  useState } from "react";
 import { Recipe, SelectedRecipe } from "../types/interfaces";
 import { getRecipes, postSelectedRecipes } from "../services/Recipes";
 import { useIngredientsStore } from "../App";
+import { Button } from "./ui/button";
   
 
 const RecipeFind = () => {
@@ -76,9 +77,13 @@ const RecipeFind = () => {
                          onClick={() => handleIngredientChange(ing.ingredient_name)}
                        >
                          {ing.ingredient_name}
-                       </li>         
+
+                       </li> 
+                               
               ))}
+
             </ul>
+            
             <button className="rounded-lg px-4 py-2 bg-blue-500 text-blue-100 hover:bg-blue-600 duration-300"
             onClick={handleGetRecipes}>Search for recipe</button>
 
@@ -129,8 +134,7 @@ const RecipeFind = () => {
         ))}
         </ul>
         <button className="fixed w-auto bottom-0 right-0 mb-4 ml-4 px-3 py-2 text-sm bg-blue-500 hover:bg-blue-600 text-white rounded focus:outline-none focus:ring focus:border-blue-300 transition"
-        onClick={() => handleRecipesSubmit(selectedRecipes)} >Save Recipes</button>
-
+        onClick={() => handleRecipesSubmit(selectedRecipes)}>Save Recipes</button>
     </div>
     </div>
     </div>

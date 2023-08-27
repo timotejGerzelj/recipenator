@@ -10,6 +10,7 @@ import RecipeFind from "./components/RecipeFind";
 import { getIngredients } from "./services/Ingredients";
 import { useEffect } from "react";
 import { getRecipes, getSelectedRecipes } from "./services/Recipes";
+import AddIngredientForm from "./components/AddIngredientForm";
 
 interface IngredientsState {
   ingredients: Ingredient[],
@@ -69,6 +70,7 @@ return (
       <Route path="/schedulemeals/1" element={<MealSchedule1 />} />
       <Route path="/schedulemeals/2" element={<MealScheduleStep2 />} />
       <Route path="/findrecipe" element={<RecipeFind />} />
+
     </Routes>
   </BrowserRouter>
 

@@ -1,31 +1,42 @@
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { Ingredient, SelectedRecipe } from "../types/interfaces";
-import PantryList from "./PantryList";
-import RecipeFind from "./RecipeFind";
+import { SelectedRecipe } from "../types/interfaces";
 import { deleteIngredient, getIngredients, updateIngredient } from "../services/Ingredients";
 import { useNavigate } from "react-router-dom";
 import { useIngredientsStore, useRecipesStore } from "../App";
 
+import AddIngredientForm from "./AddIngredientForm";
+import EditIngredientForm from "./EditIngredientForm";
+
+
+
+
 function Home() {
-    const { register, reset, getValues } = useForm();
-    const [editingIngredientId, setEditingIngredientId] = useState<string>("");
-    const [currentView, setCurrentView] = useState('');
     const navigate = useNavigate();
     const {ingredients ,setIngredients} = useIngredientsStore();
     const {selectedRecipes, setSelectedRecipes} = useRecipesStore();
-    const setNewView = (view: string) => {
-      setCurrentView(view);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isEditIngredientOpen, setIsEditIngredientOpen] = useState(false);
+    const [isAddIngredientOpen, setIsAddIngredientOpen] = useState(false);
+
+
+    const handleEditIngredientOpen = () => {
+      setIsEditIngredientOpen(true);
+    };
+    const handleEditIngredientClose = () => {
+      setIsEditIngredientOpen(false);
+    };
+    const handleAddIngredientOpen = () => {
+      setIsEditIngredientOpen(true);
+    };
+    const handleAddIngredientClose = () => {
+      setIsEditIngredientOpen(false);
     };
   
-    const renderView = () => {
-      switch (currentView) {
-        case 'addIngredient':
-          return <PantryList/>
-        case 'findRecipe':
-          return <RecipeFind/>
-      }
-    }
+    const handleCloseModal = () => {
+      setIsModalOpen(false);
+    };
+  
       useEffect(() => {
       async function loadIngredients() {
         try {
@@ -48,31 +59,7 @@ function Home() {
       catch (error) {
           console.error("Error deleting ingredient:", error);
       }}
-      const toggleEditMode = (ingredientId: string) => {
-        setEditingIngredientId(ingredientId);
-      };
-      async function handleUpdate(ing: Ingredient) {
-        const id = ing.ingredient_id
-        const valuesToUpdate = getValues();
-        const ingredientName = valuesToUpdate.updateIngredientName;
-        const ingredientAmount = parseInt(valuesToUpdate.updateIngredientAmount);
-        const ingredientUnit = valuesToUpdate.updateIngredientUnit;      
-        const updateIngr: Ingredient = {
-          ingredient_id: id,
-          ingredient_name: ingredientName,
-          quantity: ingredientAmount,
-          unit: ingredientUnit
-        }
-        try {
-          let updatedIngr = await updateIngredient(updateIngr);
-          const updatedIngredients = ingredients.map((ingredient) =>
-          ingredient.ingredient_id === updatedIngr.ingredient_id ? updatedIngr : ingredient
-          );
-          setIngredients(updatedIngredients)
-          setEditingIngredientId("");
-        }catch (error) {
-          console.error("Error updating ingredient:", error);
-    }}
+
     return (
       <div className="container h-screen mx-auto bg-gray-100 p-4 font-sans bg-gray-100">
       <div className="flex flex-row">
@@ -86,18 +73,25 @@ function Home() {
                   className="p-2 border border-gray-300 rounded hover:bg-gray-100 transition"
                 >
                   {ing.ingredient_name}
+                  <button onClick={handleEditIngredientOpen}>Edit</button>
+                  <EditIngredientForm ingredient={ingredients[index]}        
+                  onClose={handleEditIngredientClose} // Pass the onClose function
+                  open={isEditIngredientOpen} // Pass the open state
+ />             
+                <button onClick={() => handleDelete(ing.ingredient_id)}>Delete</button>
+
                 </li>
               ))}
             </ul>
-            <button
-              className="rounded-lg px-4 py-2 bg-blue-500 text-blue-100 hover:bg-blue-600 duration-300"
-              onClick={() => setNewView('addIngredient')}
-            >
-              Add Ingredient
-            </button>
+            
+            <button onClick={handleAddIngredientOpen} className="rounded-lg px-4 py-2 bg-blue-500 text-blue-100 hover:bg-blue-600 duration-300">
+            Add ingredient</button>
+          <AddIngredientForm 
+          onClose={handleAddIngredientClose}
+          open={isAddIngredientOpen}
+          />
           </div>
         </div>
-
         <div className="w-full sm:w-2/3 md:w-3/4 pt-1 px-4">
         <div className="ml-auto">
         <h3>Recipes</h3>
@@ -111,7 +105,7 @@ function Home() {
         <h3 className="text-xl font-semibold mb-2">{recipe.label}</h3>
         <ul>
           {recipe.recipe_ingredients.split(',').map((ingredient) => (
-            <li>{ingredient}</li>
+            <li>- {ingredient}</li>
           ) )}
         </ul>
         <a
