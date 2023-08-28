@@ -5,14 +5,6 @@ import { Ingredient } from '@/types/interfaces';
 import { updateIngredient } from '@/services/Ingredients';
 import { useIngredientsStore, useRecipesStore } from '@/App';
 
-interface EditIngredientProps {
-  ingredient: Ingredient; // Replace with your Ingredient type
-  onSave: (data: any) => void;
-  onClose: () => void;
-  open: boolean;
-}
-
-
 const EditIngredientForm = ({ ingredient, onClose, open }) => {
   const { register, handleSubmit, setValue } = useForm();
   const {ingredients ,setIngredients} = useIngredientsStore();

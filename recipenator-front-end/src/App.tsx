@@ -33,7 +33,6 @@ export const useRecipesStore = create<RecipeState>()((set) => ({
 }));
 
 function App() {
-//const updateIngredients = useIngredientsStore((state) => state.setIngredients);
 
 const { ingredients ,setIngredients }= useIngredientsStore();
 const { selectedRecipes , setSelectedRecipes }= useRecipesStore();

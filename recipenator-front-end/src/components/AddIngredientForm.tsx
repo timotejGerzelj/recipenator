@@ -8,21 +8,21 @@ import { Dialog, DialogContent, DialogHeader, DialogTrigger } from './ui/dialog'
 
 interface UseFormInputs {
     ingredientName: string,
-    ingredientAmount: number,
+    ingredientAmount: string,
     ingredientMeasure: string
   }
   
 
 
 const AddIngredientForm = ({ onClose, open }) => {
-    const { register,reset, handleSubmit } = useForm<FormValues>({
+    const { register,reset, handleSubmit } = useForm<UseFormInputs>({
         defaultValues: {
             ingredientName: "",
-            ingredientAmount: 0,
+            ingredientAmount: "",
             ingredientMeasure: ""
         }
     });
-    const {ingredients, setIngredients} = useIngredientsStore<UseFormInputs>();
+    const {ingredients, setIngredients} = useIngredientsStore();
 
 
     useEffect(() => {
@@ -50,7 +50,7 @@ const AddIngredientForm = ({ onClose, open }) => {
     }
 
     return (
-                <Dialog>
+                <Dialog open={open} onClose={onClose}>
 
                 <DialogContent>
                   <DialogHeader>
@@ -62,14 +62,16 @@ const AddIngredientForm = ({ onClose, open }) => {
                         (ingredient) => ingredient.ingredient_name === data.ingredientName
                     );
                     if (ingredientAlreadyExistsIndex === -1) {
-                        ingredientAdd(data.ingredientName,parseInt(data.ingredientAmount), data.ingredientMeasure );
+                        ingredientAdd(data.ingredientName, parseInt(data.ingredientAmount), data.ingredientMeasure );
                     }
                     else {
+                        console.log("Update, ", ingredientAlreadyExistsIndex);
                         ingredientUpdate(parseInt(data.ingredientAmount), ingredientAlreadyExistsIndex);
                 
                     }
-                    reset();
-                    onClose(); 
+                    
+                    onClose();
+                    reset(); 
                     })}>
                     <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white" htmlFor="ingredientName">The name of the ingredient:</label>
                     <input className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"  {...register("ingredientName")} />

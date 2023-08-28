@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
 import { Ingredient, SelectedRecipe } from "../types/interfaces";
 import { deleteIngredient, getIngredients, updateIngredient } from "../services/Ingredients";
 import { useNavigate } from "react-router-dom";
@@ -15,7 +14,6 @@ function Home() {
     const navigate = useNavigate();
     const {ingredients ,setIngredients} = useIngredientsStore();
     const {selectedRecipes, setSelectedRecipes} = useRecipesStore();
-    const [isModalOpen, setIsModalOpen] = useState(false);
     const [isEditIngredientOpen, setIsEditIngredientOpen] = useState(false);
     const [isAddIngredientOpen, setIsAddIngredientOpen] = useState(false);
     const [ingredientIsEditing, setEditingIngredient] = useState<Ingredient>({
@@ -32,15 +30,12 @@ function Home() {
       setIsEditIngredientOpen(false);
     };
     const handleAddIngredientOpen = () => {
-      setIsEditIngredientOpen(true);
+      setIsAddIngredientOpen(true);
     };
     const handleAddIngredientClose = () => {
-      setIsEditIngredientOpen(false);
+      setIsAddIngredientOpen(false);
     };
-  
-    const handleCloseModal = () => {
-      setIsModalOpen(false);
-    };
+
   
       useEffect(() => {
       async function loadIngredients() {
@@ -108,7 +103,7 @@ function Home() {
         </div>
         <div className="w-full sm:w-2/3 md:w-3/4 pt-1 px-4">
         <div className="ml-auto">
-        <h3>Recipes</h3>
+        <h3 className="text-xl font-semibold mb-4">Recipes</h3>
         <div className="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
   {selectedRecipes.map((recipe: SelectedRecipe, index: number) => (
     <div

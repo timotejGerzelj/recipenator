@@ -6,6 +6,7 @@ const API_BASE_URL = 'http://localhost:8080/api'; // Replace with your API base 
 
 export async function getRecipes(data_to_send: string) : Promise<Recipe[]> {
     try {
+        console.log(data_to_send, " send data");
         const response = await fetch(`${API_BASE_URL}/ingredients/recipes/${data_to_send}`);
         if (!response.ok) {
             throw new Error('Failed to fetch pantry ingredients');
@@ -15,6 +16,7 @@ export async function getRecipes(data_to_send: string) : Promise<Recipe[]> {
         return data;
     }
     catch(error){
+        console.log(data_to_send, " send data");
         throw error;
     }
 }
@@ -52,16 +54,6 @@ export async function postSelectedRecipes(recipes: SelectedRecipe[]) : Promise<S
         throw error;
       }
 }
-/*#[derive(Queryable, Selectable, Serialize, Deserialize, Debug, Insertable)]
-#[diesel(table_name = recipe)]
-#[diesel(check_for_backend(diesel::pg::Pg))]
-pub struct SelectedRecipes {
-    pub recipe_id: String,
-    pub recipe_image: String,
-    pub recipe_ingredients: String,
-    pub label: String,
-    pub recipe_url: String
-}*/
 
 export async function deleteRecipe(id: string) {
     try {
